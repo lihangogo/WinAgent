@@ -16,10 +16,10 @@ public class AccountBean implements Serializable {
 	private static final long serialVersionUID = 2L;
 
 	private String accid;
-	private int uid;
-	private int balance;
+	private Integer uid;
+	private Integer balance;
 	private Date latestPay;
-	private int latestPayNum;
+	private Integer latestPayNum;
 	
 	public AccountBean() {
 		super();
@@ -31,16 +31,16 @@ public class AccountBean implements Serializable {
 	public void setAccid(String accid) {
 		this.accid = accid;
 	}
-	public int getUid() {
+	public Integer getUid() {
 		return uid;
 	}
-	public void setUid(int uid) {
+	public void setUid(Integer uid) {
 		this.uid = uid;
 	}
-	public int getBalance() {
+	public Integer getBalance() {
 		return balance;
 	}
-	public void setBalance(int balance) {
+	public void setBalance(Integer balance) {
 		this.balance = balance;
 	}
 	public Date getLatestPay() {
@@ -49,10 +49,10 @@ public class AccountBean implements Serializable {
 	public void setLatestPay(Date latestPay) {
 		this.latestPay = latestPay;
 	}
-	public int getLatestPayNum() {
+	public Integer getLatestPayNum() {
 		return latestPayNum;
 	}
-	public void setLatestPayNum(int latestPayNum) {
+	public void setLatestPayNum(Integer latestPayNum) {
 		this.latestPayNum = latestPayNum;
 	}
 	public static long getSerialversionuid() {
