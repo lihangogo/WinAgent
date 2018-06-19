@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  
+    <!-- 引入外部配置文件 -->
+    <properties resource="mysql.properties"></properties>
+    
+    <!-- 为JAVA Bean起类别名 -->
+    <typeAliases>
+    	<!-- 起名方式1，逐个配置 
+    		<typeAlias type="com.club203.beans.UserBean" alias="UserBean"/>-->	
+    	<package name="com.club203.beans"/>
+    </typeAliases>
+    
+     <!-- 配置mybatis运行环境 -->
+       <environments default="cybatis">
+         <environment id="cybatis">
+             <!-- type="JDBC" 代表使用JDBC的提交和回滚来管理事务 -->
+             <transactionManager type="JDBC" />
+             
+             <!-- mybatis提供了3种数据源类型，分别是：POOLED,UNPOOLED,JNDI -->
+            <!-- POOLED 表示支持JDBC数据源连接池 -->
+             <!-- UNPOOLED 表示不支持数据源连接池 -->
+             <!-- JNDI 表示支持外部数据源连接池 -->
+             <dataSource type="POOLED">
+                 <property name="driver" value="${jdbc.driver}" />
+                 <property name="url" value="${jdbc.url}" />
+                 <property name="username" value="${jdbc.username}" />
+                <property name="password" value="${jdbc.password}" />
+             </dataSource>
+         </environment>
+     </environments> 
+     
+     <mappers>
+     	<package name="com.club203.mapper"/>
+     </mappers>
+     
+ </configuration>
