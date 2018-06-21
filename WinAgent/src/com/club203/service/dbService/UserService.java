@@ -9,7 +9,7 @@ import com.club203.utils.DBTools;
 public class UserService {
 
 	/**
-	 * 根据用户名和密码获取用户
+	 * 根据用户名和密码获取用户 
 	 */
 	public UserBean selectUserByIdent(String userName,String password) {
 		SqlSession session = DBTools.getSession();

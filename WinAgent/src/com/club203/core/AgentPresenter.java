@@ -28,6 +28,11 @@ import com.club203.utils.NetworkUtils;
  * 		此类除了启动代理，还为service中类和DetectListener提供了方法调用
  */
 public class AgentPresenter {
+	
+	//记录使用本软件的开始时间和结束时间，用于计费
+	private long startTime=0;
+	private long stopTime=0;
+	
 	//维护一个AgentModel
 	private AgentModel agentModel = null;
 	//维护一个GUI的引用，用于更新界面

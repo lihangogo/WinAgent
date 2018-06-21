@@ -9,6 +9,9 @@
         <result property="latestPay" column="latestpay" javaType="java.util.Date"></result>
         <result property="latestPayNum" column="latestpaynum" javaType="java.lang.Integer"></result>
     </resultMap>
+    
+    <resultMap id="integer" type="java.lang.Integer"> 
+    </resultMap>
 <!-- 在各种标签中的id属性必须和接口中的方法名相同 ， id属性值必须是唯一的，不能够重复使用。parameterType属性指明查询时使用的参数类型，resultType属性指明查询返回的结果集类型-->    
 <!-- useGeneratedKeys：（ 仅 对 insert 有 用 ） 这 会 告 诉 MyBatis 使 用 JDBC 的getGeneratedKeys 
             方法来取出由数据（比如：像 MySQL 和 SQLServer 这样的数据库管理系统的自动递增字段）内部生成的主键。默认值： false。 -->    
@@ -19,4 +22,7 @@
      	select * from account where uid=#{0}
     </select>    
     
+    <update id="updateAccount" parameterType="AccountBean">
+    	update account set balance=#{balance} where uid=#{uid}
+    </update>
 </mapper>

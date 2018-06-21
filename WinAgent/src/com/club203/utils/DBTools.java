@@ -1,6 +1,12 @@
 package com.club203.utils;
 
+import java.io.IOException;
 import java.io.Reader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -37,4 +43,24 @@ public class DBTools {
 			session.close();
 		}
 	}
+    
+    /**
+     * 获取当前网络时间
+     * @return 自1970年1月1日的毫秒值
+     */
+    public static long getNetworkTime() {
+        try {
+            URL url = new URL("http://www.baidu.com");
+            URLConnection conn = url.openConnection();
+            conn.connect();
+            long dateL = conn.getDate();
+            return dateL;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
 }

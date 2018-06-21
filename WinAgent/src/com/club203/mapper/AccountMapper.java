@@ -12,4 +12,14 @@ public interface AccountMapper {
 	 */
 	public AccountBean selectAccount(Integer id)
 		throws Exception;
+	
+	/**
+	 * 更新用户的账户信息
+	 * @param accountBean
+	 * @return
+	 * @throws Exception
+	 */
+	public Integer updateAccount(AccountBean accountBean)
+		throws Exception;
+	
 }
