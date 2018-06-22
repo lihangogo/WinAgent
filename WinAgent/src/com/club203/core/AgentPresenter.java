@@ -20,6 +20,7 @@ import com.club203.proxy.http.HttpProxy;
 import com.club203.proxy.openvpn.Openvpn;
 import com.club203.service.Service;
 import com.club203.service.ServiceFactory;
+import com.club203.utils.DBTools;
 import com.club203.utils.NetworkUtils;
 
 /**
@@ -200,6 +201,9 @@ public class AgentPresenter {
 	 * @param proxy 代理数据信息
 	 */
 	public void startProxySuccess(Proxy proxy) {
+		//计费开始计时
+		startTime=DBTools.getNetworkTime();
+		
 		new MessageDialog("代理配置成功.").show();
 		agentView.setGuiText(proxy.getProxyName() + ": 代理连接成功");
 		logger.info("Proxy established successful");
@@ -274,6 +278,9 @@ public class AgentPresenter {
 	 * 代理被成功关闭后执行的操作
 	 */
 	public void stopProxySuccess() {
+		//费用结算
+		
+		
 		Proxy currentproxy = agentModel.getCurrentProxy();
 		agentModel.setProxyStatus(currentproxy.getServiceTypeIndex(), false);
 		agentModel.setCurrentProxy(null);
@@ -400,4 +407,11 @@ public class AgentPresenter {
 		}
 		return true;
 	}
+	
+	private boolean settleAccount() {
+		stopTime=DBTools.getNetworkTime();
+		
+		return true;
+	}
+	
 }

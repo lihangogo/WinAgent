@@ -10,10 +10,13 @@ import java.io.IOException;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.club203.beans.UserBean;
 import com.club203.proxy.openvpn.Openvpn;
+import com.club203.service.dbService.UserService;
 import com.club203.utils.EncryptUtils;
 
 /**
@@ -23,6 +26,7 @@ import com.club203.utils.EncryptUtils;
 public class OpenVPNAuthDlg extends AuthenDialog {	
 	private String username;
 	private String passwd;
+	private UserBean user;
 	
 	private boolean correctInput = false;
 	private final static Logger logger = LoggerFactory.getLogger(OpenVPNAuthDlg.class);
@@ -35,7 +39,7 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 		resetButton.addActionListener(new Reset());
 		//删除OpenVPN的历史鉴权文件
 		new File(Openvpn.getAuthenFilepath()).delete();
-		logger.info("Initializing authentication dialog sucessful");
+		logger.info("Initializing authentication dialog successful");
 		//若之前调用了setModel方法，构造方法在窗口关闭前不会返回
 		setVisible(true);
 	}
@@ -54,7 +58,19 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 				//记录用户名与密码
 				OpenVPNAuthDlg.this.username = new String(usernameField.getText()).trim();
 				OpenVPNAuthDlg.this.passwd = new String(passwordField.getPassword()).trim();
-				correctInput = true;
+				
+				//验证用户名与密码
+				UserService userService=new UserService();
+				user=userService.selectUserByIdent(OpenVPNAuthDlg.this.username, OpenVPNAuthDlg.this.passwd);
+				if(null!=user)	{
+					correctInput = true;
+					logger.info("User: "+user.getUserName()+" login successful");
+				}
+				else {
+					correctInput = false;
+					logger.info("User: "+user.getUserName()+" login failed");
+				}
+				
 			} catch (IOException ex) { 
 				correctInput = false;
 			} finally {
@@ -84,5 +100,9 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 	
 	public String getPasswd() {
 		return passwd;
+	}
+	
+	public UserBean getUser() {
+		return user;
 	}
 }
