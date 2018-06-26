@@ -1,23 +1,31 @@
 package com.club203.service.test;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.ibatis.session.SqlSession;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 import com.club203.beans.AccountBean;
 import com.club203.beans.UserBean;
 import com.club203.mapper.AccountMapper;
 import com.club203.mapper.UserMapper;
+import com.club203.proxy.openvpn.Openvpn;
+import com.club203.service.dbService.AccountService;
 import com.club203.utils.DBTools;
 
 public class Test {
 
-	//@org.junit.Test
+	// @org.junit.Test
 	public void selectAllUser() {
 		SqlSession session = DBTools.getSession();
 		UserMapper mapper = session.getMapper(UserMapper.class);
@@ -30,10 +38,10 @@ public class Test {
 			session.rollback();
 		}
 	}
-	
-	//@org.junit.Test
+
+	// @org.junit.Test
 	public void selectAccountByUID() {
-		Integer uid=1;
+		Integer uid = 1;
 		SqlSession session = DBTools.getSession();
 		AccountMapper mapper = session.getMapper(AccountMapper.class);
 		AccountBean account = null;
@@ -46,48 +54,111 @@ public class Test {
 			session.rollback();
 		}
 	}
-	
-	//@org.junit.Test
+
+	// @org.junit.Test
 	public void updateAccount() {
-		AccountBean accountBean=new AccountBean();
+		AccountBean accountBean = new AccountBean();
 		accountBean.setAccid("1");
 		accountBean.setBalance(201);
 		accountBean.setLatestPay(new Date());
 		accountBean.setLatestPayNum(1);
 		accountBean.setUid(1);
-		SqlSession session=DBTools.getSession();
-		AccountMapper mapper=session.getMapper(AccountMapper.class);
-		Integer i=0;
+		SqlSession session = DBTools.getSession();
+		AccountMapper mapper = session.getMapper(AccountMapper.class);
+		Integer i = 0;
 		try {
-			i=mapper.updateAccount(accountBean);
+			i = mapper.updateAccount(accountBean);
 			session.commit();
-			if(i>0)
+			if (i > 0)
 				System.out.println(true);
 			else
 				System.out.println(false);
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			session.rollback();
 			System.out.println(0);
 		}
 	}
-	
-	@org.junit.Test
+
+	// @org.junit.Test
 	public void getNetworkTime() {
 		try {
-            URL url = new URL("http://www.baidu.com");
-            URLConnection conn = url.openConnection();
-            conn.connect();
-            long dateL = conn.getDate();
-            System.out.println(dateL);
-            //Date date = new Date(dateL);
-            //SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-            //System.out.println(dateFormat.format(date));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("");
+			URL url = new URL("http://www.baidu.com");
+			URLConnection conn = url.openConnection();
+			conn.connect();
+			long dateL = conn.getDate();
+			System.out.println(dateL);
+			// Date date = new Date(dateL);
+			// SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+			// System.out.println(dateFormat.format(date));
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("");
+	}
+	
+	//@org.junit.Test
+	public void readFile() {
+		try {
+			File f=new File("conf\\Fee.xml");	
+			DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder=factory.newDocumentBuilder();
+			Document document=builder.parse(f);
+			NodeList n1=document.getElementsByTagName("rule1");
+			//for(int i=0;i<n1.getLength();i++)
+				System.out.println(document.getElementsByTagName("perHour").item(0).getFirstChild()
+						.getNodeValue());
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@org.junit.Test
+	public void reckonFee() {
+		//long startTime,long stopTime
+		//long time=(stopTime-startTime)/(1000*60);  //分钟数
+		long time=0;
+		long time1=33;
+		if(time1<60)
+			time=1;                 
+		else
+			time/=60;   //小时数
+		int rule=0;		//收费标准
+		try {
+			File f=new File("conf\\Fee.xml");	
+			DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder=factory.newDocumentBuilder();
+			Document document=builder.parse(f);
+			rule=Integer.valueOf(document.getElementsByTagName("perHour").item(0).getFirstChild()
+						.getNodeValue());
+		}catch(Exception e) {
+			e.printStackTrace();
+		}	
+		int fee=(int) (time*rule);   //最终的费用
+		int now=0,uid=1;
+		/*
+		try {
+			FileReader fileReader=new FileReader(Openvpn.getAuthenFilepath());
+			char[] buf=new char[1024];
+			int num=0;
+			num=fileReader.read(buf);
+			String[] strs=new String(buf,0,num).split(" ");
+			now=Integer.valueOf(strs[3])-fee;
+			uid=Integer.valueOf(strs[2]);
+			fileReader.close();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}*/
+		now=191-fee;
+		uid=1;
+		AccountBean accountBean=new AccountBean();
+		accountBean.setBalance(now);
+		accountBean.setUid(uid);
+		if(new AccountService().updateAccount(accountBean))
+			System.out.println("OK");
+		else
+			System.out.println("no");
 	}
 }

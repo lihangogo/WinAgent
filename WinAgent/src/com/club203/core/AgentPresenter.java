@@ -1,6 +1,9 @@
 package com.club203.core;
 
 import java.awt.EventQueue;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,18 +11,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
+import com.club203.beans.AccountBean;
 import com.club203.beans.Proxy;
-import com.club203.config.ProxyReader;
 import com.club203.config.ConfReader;
 import com.club203.config.GatewayReader;
+import com.club203.config.ProxyReader;
 import com.club203.detect.DetectListener;
 import com.club203.dialog.MessageDialog;
 import com.club203.proxy.http.HttpProxy;
 import com.club203.proxy.openvpn.Openvpn;
 import com.club203.service.Service;
 import com.club203.service.ServiceFactory;
+import com.club203.service.dbService.AccountService;
 import com.club203.utils.DBTools;
 import com.club203.utils.NetworkUtils;
 
@@ -279,7 +290,10 @@ public class AgentPresenter {
 	 */
 	public void stopProxySuccess() {
 		//费用结算
-		
+		if(settleAccount())
+			logger.info("Reckon Fee successful");
+		else
+			logger.info("Reckon Fee failed");
 		
 		Proxy currentproxy = agentModel.getCurrentProxy();
 		agentModel.setProxyStatus(currentproxy.getServiceTypeIndex(), false);
@@ -408,10 +422,14 @@ public class AgentPresenter {
 		return true;
 	}
 	
+	/**
+	 * 付费操作
+	 * @return
+	 */
 	private boolean settleAccount() {
-		stopTime=DBTools.getNetworkTime();
-		
-		return true;
+		if(new AccountService().reckonFee(startTime, stopTime))
+			return true;
+		return false;
 	}
 	
 }
