@@ -64,24 +64,29 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 			user=userService.selectUserByIdent(OpenVPNAuthDlg.this.username, OpenVPNAuthDlg.this.passwd);
 			if(null!=user)	{
 				account=new AccountService().selectAccountByUID(user.getUid());
-				correctInput = true;
-				logger.info("User: "+user.getUserName()+" login successful");
-				try(FileWriter filewriter = new FileWriter(Openvpn.getAuthenFilepath())){
-					filewriter.write(new String(usernameField.getText()).trim());
-					filewriter.write(" ");
-					filewriter.write(new String(passwordField.getPassword()).trim());
-					filewriter.write(" ");
-					filewriter.write(new String(""+user.getUid()));
-					filewriter.write(" ");
-					filewriter.write(new String(""+account.getBalance()));
-					filewriter.close();
-				}catch(IOException E) {
+				if(account.getBalance()>0) {	//账户余额足够
+					correctInput = true;
+					logger.info("User: "+user.getUserName()+" login successful");
+					try(FileWriter filewriter = new FileWriter(Openvpn.getAuthenFilepath())){
+						filewriter.write(new String(usernameField.getText()).trim());
+						filewriter.write(" ");
+						filewriter.write(new String(passwordField.getPassword()).trim());
+						filewriter.write(" ");
+						filewriter.write(new String(""+user.getUid()));
+						filewriter.write(" ");
+						filewriter.write(new String(""+account.getBalance()));
+						filewriter.close();
+					}catch(IOException E) {
+						correctInput = false;
+					}finally {
+						EncryptUtils.hideFile(Openvpn.getAuthenFilepath());
+					}
+					logger.info("Inputing username and password successful");
+					OpenVPNAuthDlg.this.dispose();
+				}else {   //账户余额不足
 					correctInput = false;
-				}finally {
-					EncryptUtils.hideFile(Openvpn.getAuthenFilepath());
+					logger.info("User: "+user.getUserName()+" account balance is insufficient，Please recharge in time!");
 				}
-				logger.info("Inputing username and password successful");
-				OpenVPNAuthDlg.this.dispose();
 			}
 			else {
 				correctInput = false;
