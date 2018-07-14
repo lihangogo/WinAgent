@@ -1,4 +1,8 @@
-/META-INF/
 /com/
-/img/
 /target/
+<<<<<<< HEAD
+=======
+/META-INF/
+/img/
+/complain/
+>>>>>>> f69e26f3e3f6fb8a82a6358082bdce5ce0c0b2f3

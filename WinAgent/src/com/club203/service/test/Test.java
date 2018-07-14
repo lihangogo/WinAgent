@@ -1,7 +1,6 @@
 package com.club203.service.test;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,12 +15,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import com.club203.beans.AccountBean;
+import com.club203.beans.OnlineBean;
 import com.club203.beans.UserBean;
+import com.club203.dialog.ShowMessageDlg;
 import com.club203.mapper.AccountMapper;
+import com.club203.mapper.OnlineMapper;
 import com.club203.mapper.UserMapper;
-import com.club203.proxy.openvpn.Openvpn;
 import com.club203.service.dbService.AccountService;
+import com.club203.service.dbService.OnlineService;
 import com.club203.utils.DBTools;
+import com.club203.utils.DBUtils;
 
 public class Test {
 
@@ -115,7 +118,7 @@ public class Test {
 		}
 	}
 	
-	@org.junit.Test
+	//@org.junit.Test
 	public void reckonFee() {
 		//long startTime,long stopTime
 		//long time=(stopTime-startTime)/(1000*60);  //分钟数
@@ -160,5 +163,54 @@ public class Test {
 			System.out.println("OK");
 		else
 			System.out.println("no");
+	}
+	
+	//@org.junit.Test
+	public void selectOnlineNum() {
+		SqlSession session = DBTools.getSession();
+		OnlineMapper mapper = session.getMapper(OnlineMapper.class);
+		Integer i=0;
+		try {
+			i=mapper.selectOnlineNum();
+			System.out.println(i);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//@org.junit.Test
+	public void addOnline() {
+		OnlineBean online=new OnlineBean();
+		online.setId(DBUtils.getUUID());
+		online.setUid(1);
+		SqlSession session = DBTools.getSession();
+		OnlineMapper mapper = session.getMapper(OnlineMapper.class);
+		try {
+			System.out.println(mapper.addOnline(online));
+			session.commit();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//@org.junit.Test
+	public void addTest() {
+		OnlineService onlineService=new OnlineService();
+		System.out.println(onlineService.addOnlineRecord(1));
+	}
+	
+	//@org.junit.Test
+	public void delTest() {
+		System.out.println(new OnlineService().deleteOnlineRecord(1));
+	}
+	
+	//@org.junit.Test
+	public void isOnlineTest() {
+		System.out.println(new OnlineService().isOnline(1));
+	}
+	
+	@org.junit.Test
+	public void uiTest() {
+		new ShowMessageDlg("用户数已达上限！");
 	}
 }

@@ -16,6 +16,11 @@ import javax.swing.JButton;
 
 public class MyJButton extends JButton{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private BufferedImage image_over; // 鼠标在按钮上的图片  
     private BufferedImage image_off; // 鼠标不在按钮上的图片  
     private BufferedImage image_pressed; // 鼠标按下按钮时的图片  
