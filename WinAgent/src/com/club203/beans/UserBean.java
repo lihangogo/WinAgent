@@ -82,6 +82,6 @@ public class UserBean implements Serializable {
 	public String toString() {
 		return "UserBean [uid=" + uid + ", userName=" + userName + ", nickName=" + nickName + ", passWord=" + passWord
 				+ ", phone=" + phone + ", email=" + email + ", regTime=" + regTime + ", updateTime=" + updateTime + "]";
-	}
 	
+	}
 }
