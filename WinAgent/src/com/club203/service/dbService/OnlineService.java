@@ -1,13 +1,9 @@
 package com.club203.service.dbService;
 
-import java.io.FileReader;
-import java.io.IOException;
-
 import org.apache.ibatis.session.SqlSession;
 
 import com.club203.beans.OnlineBean;
 import com.club203.mapper.OnlineMapper;
-import com.club203.proxy.openvpn.Openvpn;
 import com.club203.utils.DBTools;
 import com.club203.utils.DBUtils;
 
@@ -15,9 +11,10 @@ public class OnlineService {
 
 	/**
 	 * 添加在线记录
+	 * @param uid 用户id
 	 * @return
 	 */
-	public boolean addOnlineRecord() {
+	public boolean addOnlineRecord(Integer uid) {
 		SqlSession session=DBTools.getSession();
 		OnlineMapper mapper=session.getMapper(OnlineMapper.class);
 		Integer i=0;
@@ -26,19 +23,6 @@ public class OnlineService {
 			if(i>=100)    //在线人数不得超过100人
 				return false;
 			else {
-				Integer uid=1;
-				try {
-					//读取当前登录的用户名
-					FileReader fileReader=new FileReader(Openvpn.getAuthenFilepath());
-					char[] buf=new char[1024];
-					int num=0;
-					num=fileReader.read(buf);
-					String[] strs=new String(buf,0,num).split(" ");
-					uid=Integer.valueOf(strs[2]);
-					fileReader.close();		
-				}catch(IOException e) {
-					e.printStackTrace();
-				}
 				// 添加记录
 				OnlineBean bean=new OnlineBean();
 				bean.setId(DBUtils.getUUID());
@@ -82,6 +66,27 @@ public class OnlineService {
 			sqlSession.rollback();
 			return false;
 		}	
+	}
+	
+	/**
+	 * 判断该用户是否已登录
+	 * @param uid
+	 * @return
+	 */
+	public boolean isOnline(Integer uid) {
+		SqlSession session=DBTools.getSession();
+		OnlineMapper mapper = session.getMapper(OnlineMapper.class);
+		OnlineBean bean=null;
+		try {
+			bean=mapper.selectOnline(uid);
+			if(null==bean)
+				return false;
+			else
+				return true;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return true;
+		}
 	}
 	
 }

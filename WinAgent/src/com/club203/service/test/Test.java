@@ -17,10 +17,12 @@ import org.w3c.dom.NodeList;
 import com.club203.beans.AccountBean;
 import com.club203.beans.OnlineBean;
 import com.club203.beans.UserBean;
+import com.club203.dialog.ShowMessageDlg;
 import com.club203.mapper.AccountMapper;
 import com.club203.mapper.OnlineMapper;
 import com.club203.mapper.UserMapper;
 import com.club203.service.dbService.AccountService;
+import com.club203.service.dbService.OnlineService;
 import com.club203.utils.DBTools;
 import com.club203.utils.DBUtils;
 
@@ -176,7 +178,7 @@ public class Test {
 		}
 	}
 	
-	@org.junit.Test
+	//@org.junit.Test
 	public void addOnline() {
 		OnlineBean online=new OnlineBean();
 		online.setId(DBUtils.getUUID());
@@ -189,5 +191,26 @@ public class Test {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	//@org.junit.Test
+	public void addTest() {
+		OnlineService onlineService=new OnlineService();
+		System.out.println(onlineService.addOnlineRecord(1));
+	}
+	
+	//@org.junit.Test
+	public void delTest() {
+		System.out.println(new OnlineService().deleteOnlineRecord(1));
+	}
+	
+	//@org.junit.Test
+	public void isOnlineTest() {
+		System.out.println(new OnlineService().isOnline(1));
+	}
+	
+	@org.junit.Test
+	public void uiTest() {
+		new ShowMessageDlg("用户数已达上限！");
 	}
 }

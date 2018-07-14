@@ -29,4 +29,13 @@ public interface OnlineMapper {
 	 */
 	public Integer selectOnlineNum()
 		throws Exception;
+	
+	/**
+	 * 查询该账号是否已登录
+	 * @param uid
+	 * @return
+	 * @throws Exception
+	 */
+	public OnlineBean selectOnline(Integer uid)
+		throws Exception;
 }

@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
@@ -18,14 +19,20 @@ import com.club203.beans.AccountBean;
 import com.club203.beans.UserBean;
 import com.club203.proxy.openvpn.Openvpn;
 import com.club203.service.dbService.AccountService;
+import com.club203.service.dbService.OnlineService;
 import com.club203.service.dbService.UserService;
 import com.club203.utils.EncryptUtils;
 
 /**
  * 与OpenVPN的建连逻辑相关联，鉴权对话框
- * @author hehaoxing
+ * @author LiHan
  */
 public class OpenVPNAuthDlg extends AuthenDialog {	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private String username;
 	private String passwd;
 	private UserBean user;
@@ -33,6 +40,7 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 	
 	private boolean correctInput = false;
 	private final static Logger logger = LoggerFactory.getLogger(OpenVPNAuthDlg.class);
+	private JDialog jd=this;
 	
 	public OpenVPNAuthDlg() {
 		super();
@@ -63,6 +71,18 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 			UserService userService=new UserService();
 			user=userService.selectUserByIdent(OpenVPNAuthDlg.this.username, OpenVPNAuthDlg.this.passwd);
 			if(null!=user)	{
+				
+				//验证当前账号是否已登录
+				OnlineService onlineService=new OnlineService();
+				if(onlineService.isOnline(user.getUid())) {
+					new ShowMessageDlg("该账号已登录，请勿重复登录...");
+					return;
+				}
+				//验证当前在线用户数是否达到100人上限
+				if(!onlineService.addOnlineRecord(user.getUid())) {
+					new ShowMessageDlg("当前在线用户人数已达上限，请稍后再试...");
+					return;
+				}
 				account=new AccountService().selectAccountByUID(user.getUid());
 				if(account.getBalance()>0) {	//账户余额足够
 					correctInput = true;
@@ -85,6 +105,7 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 					OpenVPNAuthDlg.this.dispose();
 				}else {   //账户余额不足
 					correctInput = false;
+					new ShowMessageDlg("账户余额不足，请及时充值！");
 					logger.info("User: "+user.getUserName()+" account balance is insufficient，Please recharge in time!");
 				}
 			}
@@ -100,6 +121,8 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 		public void actionPerformed(ActionEvent e) {
 			usernameField.setText("");
 			passwordField.setText("");
+			username="";
+			passwd="";
 			logger.info("Clearing username and password succeddful");
 		}
 	}
@@ -119,4 +142,5 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 	public UserBean getUser() {
 		return user;
 	}
+	
 }

@@ -3,7 +3,7 @@
 <mapper namespace="com.club203.mapper.OnlineMapper">
 <!-- 自定义返回结果集 -->
    <resultMap id="OnlineMap" type="OnlineBean">
-        <id property="id" column="id" javaType="java.lang.Integer"></id>
+        <id property="id" column="id" javaType="java.lang.String"></id>
         <result property="uid" column="uid" javaType="java.lang.Integer"></result>
     </resultMap>
 <!-- 在各种标签中的id属性必须和接口中的方法名相同 ， id属性值必须是唯一的，不能够重复使用。parameterType属性指明查询时使用的参数类型，resultType属性指明查询返回的结果集类型-->    
@@ -23,5 +23,9 @@
     <select id="selectOnlineNum" resultType="Integer">
      	select count(1) from online
     </select>     
+    
+    <select id="selectOnline" parameterType="Integer" resultMap="OnlineMap">
+    	select * from online where uid=#{uid}
+    </select>
     
 </mapper>
