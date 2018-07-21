@@ -111,7 +111,7 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 			}
 			else {
 				correctInput = false;
-				logger.info("User: "+user.getUserName()+" login failed");
+				logger.info("User: "+ OpenVPNAuthDlg.this.username +" login failed");
 			}	
 		}
 	}

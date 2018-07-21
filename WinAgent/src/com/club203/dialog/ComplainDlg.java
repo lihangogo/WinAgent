@@ -1,9 +1,12 @@
 package com.club203.dialog;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -45,7 +48,7 @@ public class ComplainDlg extends JDialog {
 	private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	
 	private final int WIDTH = 430;
-	private final int HEIGHT = 550;
+	private final int HEIGHT = 585;
 	
 	/**
 	 * 投诉二维码框
@@ -69,10 +72,10 @@ public class ComplainDlg extends JDialog {
 			getContentPane().add(jLabel);
 			jLabel.setHorizontalAlignment(SwingConstants.CENTER);
 			
-			JButton buttonComplain = new JButton("完成");
+			JButton buttonComplain = new JButton("完成");		
 			buttonComplain.setText("完成");
 			buttonComplain.setEnabled(true);
-			buttonComplain.setBounds(widthZoom(190), heightZoom(100), widthZoom(100), heightZoom(25));
+			buttonComplain.setBounds(100, 580, 100, 200);
 			buttonComplain.addActionListener(new ActionListener() {		
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -80,7 +83,8 @@ public class ComplainDlg extends JDialog {
 				}
 			});
 			getContentPane().add(buttonComplain);
-			
+			setLayout(new FlowLayout());
+			setAlwaysOnTop(true);
 			validate();
 		}catch(Exception e) {
 			logger.info("Failed to load image : complain.png");
