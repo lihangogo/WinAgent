@@ -2,6 +2,16 @@
 /.project
 /.settings/
 /com/
+<<<<<<< HEAD
 /META-INF/
 /img/
 /target/
+=======
+/target/
+<<<<<<< HEAD
+=======
+/META-INF/
+/img/
+/complain/
+>>>>>>> f69e26f3e3f6fb8a82a6358082bdce5ce0c0b2f3
+>>>>>>> ff1598672dba3c521cb20cd1e28a9f18a358a91f
