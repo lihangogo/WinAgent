@@ -1,5 +1,7 @@
+/.classpath
+/.project
+/.settings/
 /com/
-/target/
 /META-INF/
 /img/
-/complain/
+/target/

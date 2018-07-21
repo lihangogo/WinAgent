@@ -17,6 +17,7 @@ import org.w3c.dom.NodeList;
 import com.club203.beans.AccountBean;
 import com.club203.beans.OnlineBean;
 import com.club203.beans.UserBean;
+import com.club203.dialog.ComplainDlg;
 import com.club203.dialog.ShowMessageDlg;
 import com.club203.mapper.AccountMapper;
 import com.club203.mapper.OnlineMapper;
@@ -28,7 +29,7 @@ import com.club203.utils.DBUtils;
 
 public class Test {
 
-	// @org.junit.Test
+	//@org.junit.Test
 	public void selectAllUser() {
 		SqlSession session = DBTools.getSession();
 		UserMapper mapper = session.getMapper(UserMapper.class);
@@ -209,8 +210,13 @@ public class Test {
 		System.out.println(new OnlineService().isOnline(1));
 	}
 	
-	@org.junit.Test
+	//@org.junit.Test
 	public void uiTest() {
 		new ShowMessageDlg("用户数已达上限！");
+	}
+	
+	@org.junit.Test
+	public void Test() {
+		ComplainDlg.complainDlgShow("11");
 	}
 }

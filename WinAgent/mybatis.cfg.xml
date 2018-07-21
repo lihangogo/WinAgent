@@ -13,11 +13,10 @@
     </typeAliases>
     
      <!-- 配置mybatis运行环境 -->
-       <environments default="cybatis">
+       <environments default="dybatis">
          <environment id="cybatis">
              <!-- type="JDBC" 代表使用JDBC的提交和回滚来管理事务 -->
-             <transactionManager type="JDBC" />
-             
+             <transactionManager type="JDBC" />     
              <!-- mybatis提供了3种数据源类型，分别是：POOLED,UNPOOLED,JNDI -->
             <!-- POOLED 表示支持JDBC数据源连接池 -->
              <!-- UNPOOLED 表示不支持数据源连接池 -->
@@ -28,6 +27,16 @@
                  <property name="username" value="${jdbc.username}" />
                 <property name="password" value="${jdbc.password}" />
              </dataSource>
+         </environment>
+         
+         <environment id="dybatis">
+         		<transactionManager type="JDBC"/>
+         		<dataSource type="POOLED">
+         		 	<property name="driver" value="${jdbc.driverInner}" />
+                 	<property name="url" value="${jdbc.urlInner}" />
+                 	<property name="username" value="${jdbc.usernameInner}" />
+                 	<property name="password" value="${jdbc.passwordInner}" />
+             	</dataSource>
          </environment>
      </environments> 
      

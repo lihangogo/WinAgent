@@ -36,6 +36,7 @@ import com.club203.beans.Proxy;
 import com.club203.config.ProxyReader;
 import com.club203.config.ConfReader;
 import com.club203.dialog.AgentTrayIcon;
+import com.club203.dialog.ComplainDlg;
 import com.club203.dialog.ExitDialog;
 import com.club203.dialog.MessageDialog;
 
@@ -106,6 +107,19 @@ public class AgentView extends JFrame{
 		setGuiText("没有正在使用的代理");
 		container.add(proxyStatus);	
 		addComboboxFromConf(ProxyReader.getProxy());
+		
+		//投诉按钮
+		JButton buttonComplain = new JButton("反馈");
+		buttonComplain.setText("反馈");
+		buttonComplain.setEnabled(true);
+		buttonComplain.setBounds(widthZoom(190), heightZoom(15 + serviceTypeList.length * 100), widthZoom(60), heightZoom(25));
+		buttonComplain.addActionListener(new ActionListener() {		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ComplainDlg.complainDlgShow("...");
+			}
+		});
+		container.add(buttonComplain);
 		
 		agent = AgentPresenter.getAgentPresenter();
 		//服务类型从1开始，而数据索引一般从0开始
