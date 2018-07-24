@@ -1,4 +1,8 @@
+/.classpath
+/.project
+/.settings/
 /com/
+<<<<<<< HEAD
 /conf/
 /dependency-reduced-pom.xml
 /img/
@@ -7,5 +11,20 @@
 /mybatis.cfg.xml
 /mysql.properties
 /pom.xml
+=======
+<<<<<<< HEAD
+/META-INF/
+/img/
+/target/
+=======
+>>>>>>> 0eb8373ca42c92e3ed0b1ef2860e481b59eb54e2
 /target/
 /META-INF/
+<<<<<<< HEAD
+=======
+/img/
+/complain/
+>>>>>>> f69e26f3e3f6fb8a82a6358082bdce5ce0c0b2f3
+>>>>>>> ff1598672dba3c521cb20cd1e28a9f18a358a91f
+/log/
+>>>>>>> 0eb8373ca42c92e3ed0b1ef2860e481b59eb54e2
