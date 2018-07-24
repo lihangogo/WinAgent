@@ -1,8 +1,11 @@
 /com/
-/target/
-<<<<<<< HEAD
-=======
-/META-INF/
+/conf/
+/dependency-reduced-pom.xml
 /img/
-/complain/
->>>>>>> f69e26f3e3f6fb8a82a6358082bdce5ce0c0b2f3
+/lib/
+/log/
+/mybatis.cfg.xml
+/mysql.properties
+/pom.xml
+/target/
+/META-INF/
