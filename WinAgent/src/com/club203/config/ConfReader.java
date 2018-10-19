@@ -30,7 +30,7 @@ public class ConfReader {
 	 */
 	private ConfReader() {
 		//借助Spring框架读取必要信息
-		this.context = new ClassPathXmlApplicationContext("classpath:ApplicationConfig.xml");
+		this.context = new ClassPathXmlApplicationContext("classpath*:ApplicationConfig.xml");
 		this.config = (Configuration) context.getBean("Config");		
 		this.encryptInfo = "club203";
 	}

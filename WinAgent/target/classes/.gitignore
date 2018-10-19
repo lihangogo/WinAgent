@@ -1,18 +1,11 @@
-/.classpath
-/.project
-/.settings/
 /com/
-<<<<<<< HEAD
-/META-INF/
+/conf/
+/dependency-reduced-pom.xml
 /img/
-/target/
-=======
-/target/
-<<<<<<< HEAD
-=======
-/META-INF/
-/img/
-/complain/
->>>>>>> f69e26f3e3f6fb8a82a6358082bdce5ce0c0b2f3
->>>>>>> ff1598672dba3c521cb20cd1e28a9f18a358a91f
+/lib/
 /log/
+/mybatis.cfg.xml
+/mysql.properties
+/pom.xml
+/target/
+/META-INF/

@@ -74,10 +74,10 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 				
 				//验证当前账号是否已登录
 				OnlineService onlineService=new OnlineService();
-				if(onlineService.isOnline(user.getUid())) {
-					new ShowMessageDlg("该账号已登录，请勿重复登录...");
-					return;
-				}
+				//if(onlineService.isOnline(user.getUid())) {
+					//new ShowMessageDlg("该账号已登录，请勿重复登录...");
+					//return;
+				//}
 				//验证当前在线用户数是否达到100人上限
 				if(!onlineService.addOnlineRecord(user.getUid())) {
 					new ShowMessageDlg("当前在线用户人数已达上限，请稍后再试...");

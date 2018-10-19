@@ -75,7 +75,7 @@ public class AccountService {
 			time/=60;   //小时数
 		int rule=0;		//收费标准
 		try {
-			File f=new File("conf\\Fee.xml");	
+			File f=new File("./conf/Version.xml");	
 			DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder=factory.newDocumentBuilder();
 			Document document=builder.parse(f);
