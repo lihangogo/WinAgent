@@ -27,15 +27,9 @@
      </environments> 
      
      <mappers>
-        <mapper resource="./conf/mybatis/UserMapper.xml"/>
-        <mapper resource="./conf/mybatis/AccountMapper.xml"/>
-        <mapper resource="./conf/mybatis/OnlineMapper.xml"/>
+        <mapper resource="conf/mybatis/UserMapper.xml"/>
+        <mapper resource="conf/mybatis/AccountMapper.xml"/>
+        <mapper resource="conf/mybatis/OnlineMapper.xml"/>
      </mappers>
-     
-
-    <!--
-     <mappers>
-     	<package name="com.club203.mapper"/>
-     </mappers>
-     -->
+    
  </configuration>

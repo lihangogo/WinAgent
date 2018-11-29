@@ -4,11 +4,10 @@ import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.club203.beans.Configuration;
 import com.club203.service.Service;
+import com.club203.service.openvpn.RemoteConfig;
 
 /**
  * 读取基本的配置，并加载代理信息与当前默认网关
@@ -20,8 +19,6 @@ public class ConfReader {
 	private final Configuration config;
 	//运行日志
 	private static Logger logger = LoggerFactory.getLogger(ConfReader.class);
-	//便于重复取用Bean
-	private ApplicationContext context = null;
 	//单例，降低内存开销，为其他模块提供接口
 	private static ConfReader confReader = null;
 	
@@ -29,9 +26,7 @@ public class ConfReader {
 	 * 阻止用户创建实例
 	 */
 	private ConfReader() {
-		//借助Spring框架读取必要信息
-		this.context = new ClassPathXmlApplicationContext("classpath*:ApplicationConfig.xml");
-		this.config = (Configuration) context.getBean("Config");		
+		this.config=RemoteConfig.getBean();
 		this.encryptInfo = "club203";
 	}
 	
@@ -58,15 +53,15 @@ public class ConfReader {
 	}
 
 	public String getDefaultPingVerifyServer() {
-		return (String)context.getBean("defaultPingVerifyServer");
+		return RemoteConfig.getBean_2("defaultPingVerifyServer");
 	}
 	
 	public String getDefaultDnsVerifyServer() {
-		return (String)context.getBean("defaultDnsVerifyServer");
+		return RemoteConfig.getBean_2("defaultDnsVerifyServer");
 	}
 	
 	public String getDefaultHttpVerifyServer() {
-		return (String)context.getBean("defaultHttpVerifyServer");
+		return RemoteConfig.getBean_2("defaultHttpVerifyServer");
 	}
 	
 	public String getEncryptInfo() {

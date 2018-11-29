@@ -3,9 +3,6 @@ package com.club203.proxy;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * @author hehaoxing
  * ProxyManager类，管理ProxyService
@@ -14,8 +11,6 @@ import org.slf4j.LoggerFactory;
 public class ProxyManager {
 	//当前正在运行的代理列表，以添加的先后顺序排序
 	private List<ProxyService> proxyList;
-	
-	private final static Logger logger = LoggerFactory.getLogger(ProxyManager.class);
 	
 	private static ProxyManager manager = null;
 	

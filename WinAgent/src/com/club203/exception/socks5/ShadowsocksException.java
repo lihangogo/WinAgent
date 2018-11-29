@@ -2,6 +2,11 @@ package com.club203.exception.socks5;
 
 public class ShadowsocksException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private ShadowsocksExceptionType type;
 	
 	public ShadowsocksException(ShadowsocksExceptionType type) {

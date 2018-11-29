@@ -1,8 +1,5 @@
 package com.club203.proxy.http;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.club203.proxy.ProxyService;
 
 /**
@@ -16,8 +13,6 @@ public class HttpPacProxy implements ProxyService {
 	private int port;
 	//自动代理配置文件位置
 	private String pacUrl;
-	//日志输出
-	private final static Logger logger = LoggerFactory.getLogger(HttpPacProxy.class);
 	
 	public HttpPacProxy(String serverIP, int port, String pacUrl) {
 		super();

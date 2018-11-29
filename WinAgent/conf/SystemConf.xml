@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<confItems>
+	<ServiceType>校内线路</ServiceType>
+	<ServiceType>校外线路</ServiceType>
+	
+	<ProxyType>RouteProxy</ProxyType>
+	<ProxyType>OpenVPNProxy</ProxyType>
+	<ProxyType>DirectHttpProxy</ProxyType>
+	<ProxyType>DirectSocks5Proxy</ProxyType>
+	<ProxyType>SdnHttpProxy</ProxyType>
+	<ProxyType>SdnSocks5Proxy</ProxyType>
+	
+	<SchoolServiceType>校内线路</SchoolServiceType>
+	
+	<StartList>
+		<key1>RouteProxy</key1>
+		<value1>com.club203.service.route.StartRouteProxy</value1>
+	</StartList>
+	<StartList>
+		<key1>OpenVPNProxy</key1>
+		<value1>com.club203.service.openvpn.StartOpenvpnProxy</value1>
+	</StartList>
+	<StartList>
+		<key1>DirectHttpProxy</key1>
+		<value1>com.club203.service.directHttp.StartHttpProxy</value1>
+	</StartList>
+	<StartList>
+		<key1>DirectSocks5Proxy</key1>
+		<value1>com.club203.service.directSocks5.StartSocks5Proxy</value1>
+	</StartList>
+	<StartList>
+		<key1>SdnHttpProxy</key1>
+		<value1>com.club203.service.sdnHttp.StartHttpProxy</value1>
+	</StartList>
+	<StartList>
+		<key1>SdnSocks5Proxy</key1>
+		<value1>com.club203.service.sdnSocks5.StartSocks5Proxy</value1>
+	</StartList>
+	
+	<StopList>
+		<key2>RouteProxy</key2>
+		<value2>com.club203.service.route.StopRouteProxy</value2>
+	</StopList>
+	<StopList>
+		<key2>OpenVPNProxy</key2>
+		<value2>com.club203.service.openvpn.StopOpenvpnProxy</value2>
+	</StopList>
+	<StopList>
+		<key2>DirectHttpProxy</key2>
+		<value2>com.club203.service.directHttp.StopHttpProxy</value2>
+	</StopList>
+	<StopList>
+		<key2>DirectSocks5Proxy</key2>
+		<value2>com.club203.service.directSocks5.StopSocks5Proxy</value2>
+	</StopList>
+	<StopList>
+		<key2>SdnHttpProxy</key2>
+		<value2>com.club203.service.sdnHttp.StopHttpProxy</value2>
+	</StopList>
+	<StopList>
+		<key2>SdnSocks5Proxy</key2>
+		<value2>com.club203.service.sdnSocks5.StopSocks5Proxy</value2>
+	</StopList>
+	
+	<ReconnectList>
+		<key3>RouteProxy</key3>
+		<value3>com.club203.service.route.ReconnectRouteProxy</value3>
+	</ReconnectList>
+	<ReconnectList>
+		<key3>OpenVPNProxy</key3>
+		<value3>com.club203.service.openvpn.ReconnectOpenvpnProxy</value3>
+	</ReconnectList>
+	<ReconnectList>
+		<key3>DirectHttpProxy</key3>
+		<value3>com.club203.service.directHttp.ReconnectHttpProxy</value3>
+	</ReconnectList>
+	<ReconnectList>
+		<key3>DirectSocks5Proxy</key3>
+		<value3>com.club203.service.directSocks5.ReconnectSocks5Proxy</value3>
+	</ReconnectList>
+	<ReconnectList>
+		<key3>SdnHttpProxy</key3>
+		<value3>com.club203.service.sdnHttp.ReconnectHttpProxy</value3>
+	</ReconnectList>
+	<ReconnectList>
+		<key3>SdnSocks5Proxy</key3>
+		<value3>com.club203.service.sdnSocks5.ReconnectSocks5Proxy</value3>
+	</ReconnectList>
+	
+	<defaultPingVerifyServer>114.114.114.114</defaultPingVerifyServer>]
+	
+	<defaultDnsVerifyServer>www.baidu.com</defaultDnsVerifyServer>
+	
+	<defaultHttpVerifyServer>https://www.baidu.com</defaultHttpVerifyServer>
+</confItems>

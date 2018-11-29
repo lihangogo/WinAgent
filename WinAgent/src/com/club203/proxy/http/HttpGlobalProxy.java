@@ -1,8 +1,5 @@
 package com.club203.proxy.http;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.club203.proxy.ProxyService;
 
 /**
@@ -14,8 +11,6 @@ public class HttpGlobalProxy implements ProxyService{
 	private String serverIP;
 	//HTTP代理端口号
 	private int port;
-	//日志输出
-	private final static Logger logger = LoggerFactory.getLogger(HttpGlobalProxy.class);
 	
 	public HttpGlobalProxy(String serverIP, int port) {
 		super();

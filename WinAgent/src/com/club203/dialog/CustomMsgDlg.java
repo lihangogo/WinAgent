@@ -28,6 +28,11 @@ import javax.swing.WindowConstants;
  * Swing自带MessageDialog存在一些不合理的特性
  */
 public class CustomMsgDlg extends JDialog {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	//相对于1920 x 1080显示器的分辨率
 	private final int WIDTH = 270;
 	private final int HEIGHT = 150;
@@ -46,11 +51,11 @@ public class CustomMsgDlg extends JDialog {
 		//加载图标
 		JLabel iconLabel = null;
 		try {
-			Image image = ImageIO.read(this.getClass().getResource("/img/info.png"));
+			Image image=Toolkit.getDefaultToolkit().createImage("img/info.png");
 			ImageIcon icon = new ImageIcon(image);
 			iconLabel = new JLabel(icon);
 			iconLabel.setBounds(10, 20, 60, 60);
-		} catch (IOException e1) {		}
+		} catch (Exception e1) {		}
 		try {
 			JlabelSetText(infoLabel, message);
 		} catch (InterruptedException e) { }

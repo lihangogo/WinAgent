@@ -2,6 +2,11 @@ package com.club203.exception.openvpn;
 
 public class OpenVPNException extends Exception{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private OpenVPNExceptionType type;
 	
 	public OpenVPNException(OpenVPNExceptionType type) {

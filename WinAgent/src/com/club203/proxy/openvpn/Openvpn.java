@@ -106,6 +106,8 @@ public class Openvpn implements ProxyService {
 					td.decrypt(path + Openvpn.this.filename, deConfigPath);
 					td.decrypt(path + "openvpn-ca/ca", caFilePath);
 					
+					new File(keyFilePath).delete();
+					new File(crtFilePath).delete();
 					td.decrypt(path + "openvpn-ca/client_en.key", keyFilePath);
 					td.decrypt(path + "openvpn-ca/client_en.crt", crtFilePath);
 					

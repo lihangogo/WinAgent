@@ -20,6 +20,11 @@ import org.slf4j.LoggerFactory;
  * @author hehaoxing
  */
 public abstract class AuthenDialog extends JDialog{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	//相对于1920 x 1080显示器的分辨率
 	private final int WIDTH = 270;
 	private final int HEIGHT = 150;

@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
@@ -17,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.club203.beans.AccountBean;
 import com.club203.beans.UserBean;
+import com.club203.config.ConfReader;
 import com.club203.proxy.openvpn.Openvpn;
 import com.club203.service.dbService.AccountService;
 import com.club203.service.dbService.OnlineService;
@@ -40,7 +40,6 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 	
 	private boolean correctInput = false;
 	private final static Logger logger = LoggerFactory.getLogger(OpenVPNAuthDlg.class);
-	private JDialog jd=this;
 	
 	public OpenVPNAuthDlg() {
 		super();
@@ -63,9 +62,12 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 				return;
 			}
 			
-			//记录用户名与密码
-			OpenVPNAuthDlg.this.username = new String(usernameField.getText()).trim();
-			OpenVPNAuthDlg.this.passwd = new String(passwordField.getPassword()).trim();
+			//记录用户名与密码，并加密密码
+			OpenVPNAuthDlg.this.username = new String(usernameField.getText().trim());
+			OpenVPNAuthDlg.this.passwd = new String(
+					EncryptUtils.encrypt1(
+							new String(
+									passwordField.getPassword()).trim()));
 			
 			//验证用户名与密码
 			UserService userService=new UserService();
@@ -74,13 +76,15 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 				
 				//验证当前账号是否已登录
 				OnlineService onlineService=new OnlineService();
-				//if(onlineService.isOnline(user.getUid())) {
-					//new ShowMessageDlg("该账号已登录，请勿重复登录...");
-					//return;
-				//}
+				if(onlineService.isOnline(user.getUid())) {
+					JOptionPane.showMessageDialog(OpenVPNAuthDlg.this, "该账号已登录，请勿重复登录...", 
+							"警告", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
 				//验证当前在线用户数是否达到100人上限
-				if(!onlineService.addOnlineRecord(user.getUid())) {
-					new ShowMessageDlg("当前在线用户人数已达上限，请稍后再试...");
+				if(!onlineService.checkOnlineNumber()) {					
+					JOptionPane.showMessageDialog(OpenVPNAuthDlg.this, "当前在线用户人数已达上限，请稍后再试...", 
+							"警告", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				account=new AccountService().selectAccountByUID(user.getUid());
@@ -104,8 +108,9 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 					logger.info("Inputing username and password successful");
 					OpenVPNAuthDlg.this.dispose();
 				}else {   //账户余额不足
-					correctInput = false;
-					new ShowMessageDlg("账户余额不足，请及时充值！");
+					correctInput = false;					
+					JOptionPane.showMessageDialog(OpenVPNAuthDlg.this, "账户余额不足，请及时充值！", 
+							"警告", JOptionPane.WARNING_MESSAGE);
 					logger.info("User: "+user.getUserName()+" account balance is insufficient，Please recharge in time!");
 				}
 			}

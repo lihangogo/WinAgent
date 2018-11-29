@@ -8,19 +8,23 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Key;
 import java.security.SecureRandom;
- 
+import java.util.Base64;
+
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.KeyGenerator;
+
+import com.club203.service.openvpn.RemoteConfig;
 /**
  * 加密工具类
  */
 public class EncryptUtils { 
-	
+	String encryType;
 	Key key; 
 	
 	public EncryptUtils(String str) { 
+		encryType=RemoteConfig.getEncryType();
 		getKey(str);//生成密匙 
 	} 
 	/** 
@@ -30,9 +34,9 @@ public class EncryptUtils {
 	 */ 
 	public void getKey(String strKey) { 
 		try { 
-			KeyGenerator _generator = KeyGenerator.getInstance("DES"); 
+			KeyGenerator _generator = KeyGenerator.getInstance(encryType); 
 			_generator.init(new SecureRandom(strKey.getBytes())); 
-			this.key = _generator.generateKey(); 
+			this.key = _generator.generateKey();
 			_generator = null; 
 		} catch (Exception e) { 
     	throw new RuntimeException("Error initializing SqlMap class. Cause: " + e); 
@@ -46,7 +50,7 @@ public class EncryptUtils {
 	 * @param destFile 加密后存放的文件名 如c:/加密后文件.txt 
 	 */ 
 	public void encrypt(String file, String destFile) throws Exception { 
-		Cipher cipher = Cipher.getInstance("DES"); 
+		Cipher cipher = Cipher.getInstance(encryType); 
 		cipher.init(Cipher.ENCRYPT_MODE, this.key); 
 		InputStream is = new FileInputStream(file); 
 		OutputStream out = new FileOutputStream(destFile); 
@@ -60,6 +64,28 @@ public class EncryptUtils {
 		is.close(); 
 		out.close(); 
 	} 
+	
+	/**
+	 * 加密密码
+	 * @param str
+	 * @return
+	 * @throws Exception
+	 */
+	public static String encrypt1(String str) {
+		byte[] encodeBytes=Base64.getEncoder().encode(str.getBytes());
+		return new String(encodeBytes);
+	}
+	
+	/**
+	 * 解密密码
+	 * @param str
+	 * @return
+	 */
+	public static String decrypt1(String str) {
+		byte[] decodeBytes=Base64.getDecoder().decode(str.getBytes());
+		return new String(decodeBytes);
+	}
+	
 	/** 
 	 * 文件采用DES算法解密文件 
 	 * 
@@ -67,10 +93,11 @@ public class EncryptUtils {
 	 * @param destFile 解密后存放的文件名 如c:/ test/解密后文件.txt 
 	 */ 
 	public void decrypt(String file, String dest) throws Exception { 
-		Cipher cipher = Cipher.getInstance("DES"); 
+		Cipher cipher = Cipher.getInstance(encryType); 
 		cipher.init(Cipher.DECRYPT_MODE, this.key); 
 		InputStream is = new FileInputStream(file); 
 		OutputStream out = new FileOutputStream(dest); 
+		
 		CipherOutputStream cos = new CipherOutputStream(out, cipher); 
 		byte[] buffer = new byte[1024]; 
 		int r; 
@@ -83,6 +110,10 @@ public class EncryptUtils {
 		hideFile(dest);
 	} 
 	
+	/**
+	 * 隐藏文件
+	 * @param filename
+	 */
 	public static void hideFile(String filename) {
 		String os = System.getProperty("os.name");  
 		if(!os.toLowerCase().startsWith("win")){  
@@ -94,22 +125,9 @@ public class EncryptUtils {
 				file.mkdir();//如果文件路径不存在就创建一个
 			String string=" attrib +H  "+file.getAbsolutePath(); //设置文件属性为隐藏
 			Runtime.getRuntime().exec(string);  //
-		} catch (IOException e) {   }   
+		} catch (IOException e) {  
+			
+		}   
 	}
 	
-	/**
-	 * 用于修改已加密的配置文件与解密
-	 * 调试用
-	 */
-	public static void main(String[] args) throws Exception { 
-		EncryptUtils td = new EncryptUtils("club203"); 
-		//td.encrypt("conf/ProxyList.conf", "conf/ProxyList"); //加密 
-		//td.encrypt("conf/ap-bj.ovpn", "conf/openvpn/ap-bj.ovpn");
-		//td.encrypt("conf/ap-bupt.ovpn", "conf/openvpn/ap-bupt.ovpn");
-		//td.encrypt("conf/openvpn-ca/ca.crt", "conf/openvpn/openvpn-ca/ca.crt");
-		//td.decrypt("conf/ProxyList.conf", "decrypt"); //解密 
-		//td.decrypt("conf/openvpn/ap-bupt.ovpn", "decrypt2");
-		//td.encrypt("decrypt", "conf/ProxyList.conf");
-		//td.decrypt("conf/openvpn/openvpn-ca/ca", "conf/openvpn/openvpn-ca/ca.crt");
-	} 
 }

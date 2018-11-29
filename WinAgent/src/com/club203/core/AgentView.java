@@ -6,15 +6,17 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
-import java.awt.Window;  
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -28,13 +30,9 @@ import javax.swing.WindowConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import com.club203.beans.Proxy;
-import com.club203.config.ProxyReader;
 import com.club203.config.ConfReader;
+import com.club203.config.ProxyReader;
 import com.club203.dialog.AgentTrayIcon;
 import com.club203.dialog.ComplainDlg;
 import com.club203.dialog.ExitDialog;
@@ -46,6 +44,11 @@ import com.club203.dialog.MessageDialog;
  */
 
 public class AgentView extends JFrame{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	//相对于1920 x 1080显示器的分辨率，长度可伸缩
 	private final int WIDTH = 340;
 	private final int HEIGHT = 80 + serviceTypeCount * 100;
@@ -103,7 +106,7 @@ public class AgentView extends JFrame{
 			container.add(proxyComboBox.get(i));
 		}
 		//状态栏
-		proxyStatus.setBounds(widthZoom(40), heightZoom(15 + serviceTypeList.length * 100), widthZoom(320), heightZoom(25));
+		proxyStatus.setBounds(widthZoom(25), heightZoom(15 + serviceTypeList.length * 100), widthZoom(210), heightZoom(25));
 		setGuiText("没有正在使用的代理");
 		container.add(proxyStatus);	
 		addComboboxFromConf(ProxyReader.getProxy());
@@ -112,7 +115,7 @@ public class AgentView extends JFrame{
 		JButton buttonComplain = new JButton("反馈");
 		buttonComplain.setText("反馈");
 		buttonComplain.setEnabled(true);
-		buttonComplain.setBounds(widthZoom(190), heightZoom(15 + serviceTypeList.length * 100), widthZoom(60), heightZoom(25));
+		buttonComplain.setBounds(widthZoom(230), heightZoom(15 + serviceTypeList.length * 100), widthZoom(60), heightZoom(25));
 		buttonComplain.addActionListener(new ActionListener() {		
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -131,15 +134,17 @@ public class AgentView extends JFrame{
 		this.addWindowListener(listener);
 		//设置程序图标
 		try {
-			Image image = ImageIO.read(this.getClass().getResource("/img/logo.png"));
+			Image image=Toolkit.getDefaultToolkit().createImage("img/logo.png");
 			this.setIconImage(image);
-		} catch (IOException e) { }
+			//Image image = ImageIO.read(this.getClass().getResource("/img/logo.png"));
+			//this.setIconImage(image);
+		} catch (Exception e) { }
 		//增加系统托盘图标
 		this.trayIcon = addSystemTray();
 		
 		setVisible(true);
 		setResizable(false);
-		setSize(WIDTH, HEIGHT);
+		setSize(widthZoom(WIDTH), heightZoom(HEIGHT));
 		this.setLocationRelativeTo(null);
 		this.setAlwaysOnTop(true);
 		
@@ -148,12 +153,12 @@ public class AgentView extends JFrame{
 	}
 
 	public int widthZoom(int width) {
-		double widthZ = 1.0 * width / 1920;
+		double widthZ = 1.3 * width / 1920;
 		return (int)(widthZ * screenSize.getWidth());
 	}
 	
 	public int heightZoom(int height) {
-		double heightZ = 1.0 * height / 1080;
+		double heightZ = 1.3 * height / 1080;
 		return (int)(heightZ * screenSize.getHeight());
 	}
 	
@@ -255,8 +260,8 @@ public class AgentView extends JFrame{
 		if(SystemTray.isSupported()) {
 			Image image = null;
 			try {
-				image = ImageIO.read(this.getClass().getResource("/img/logo.png"));
-			} catch (IOException e) {
+				image=Toolkit.getDefaultToolkit().createImage("img/logo.png");
+			} catch (Exception e) {
 				return null;
 			}
 			JPopupMenu popupMenu = new JPopupMenu();

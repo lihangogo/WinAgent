@@ -18,6 +18,11 @@ import javax.swing.JRadioButton;
  * 退出窗口，防止误操作
  */
 public class ExitDialog extends JDialog {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	//相对于1920 x 1080显示器的分辨率
 	private final int WIDTH = 270;
 	private final int HEIGHT = 150;

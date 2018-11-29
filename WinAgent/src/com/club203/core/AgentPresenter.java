@@ -1,9 +1,8 @@
 package com.club203.core;
 
 import java.awt.EventQueue;
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,15 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
-import com.club203.beans.AccountBean;
 import com.club203.beans.Proxy;
 import com.club203.config.ConfReader;
 import com.club203.config.GatewayReader;
@@ -30,8 +23,8 @@ import com.club203.proxy.http.HttpProxy;
 import com.club203.proxy.openvpn.Openvpn;
 import com.club203.service.Service;
 import com.club203.service.ServiceFactory;
-import com.club203.service.dbService.AccountService;
-import com.club203.utils.DBTools;
+import com.club203.service.dbService.OnlineService;
+import com.club203.service.openvpn.RemoteConfig;
 import com.club203.utils.NetworkUtils;
 
 /**
@@ -40,10 +33,6 @@ import com.club203.utils.NetworkUtils;
  * 		此类除了启动代理，还为service中类和DetectListener提供了方法调用
  */
 public class AgentPresenter {
-	
-	//记录使用本软件的开始时间和结束时间，用于计费
-	private long startTime=0;
-	private long stopTime=0;
 	
 	//维护一个AgentModel
 	private AgentModel agentModel = null;
@@ -62,6 +51,8 @@ public class AgentPresenter {
 	private static AgentPresenter agentPresenter = null;
 	
 	private AgentPresenter() {
+		checkVersion(); //检查配置版本
+		
 		logger.info("Loading config from config file");
 		Openvpn.killall();
 		//读取配置文件与网关
@@ -83,12 +74,22 @@ public class AgentPresenter {
 	}
 	
 	/**
+	 * 检查配置
+	 */
+	private void checkVersion() {
+		RemoteConfig config=new RemoteConfig();
+		if(config.checkConfig()) {
+			logger.info("check config success");
+		}else
+			logger.info("check config failed ");	
+	}
+	
+	/**
 	 * 代理初始化
 	 */
 	public void init() {
 		logger.info("Starting initializing winagent");
 		EventQueue.invokeLater(()->agentView = new AgentView("WinAgent"));
-		//EventQueue.
 		Openvpn.init();
 		NetworkUtils.cleanDNSCache();
 		NetworkUtils.disableJVMDNSCache();
@@ -212,12 +213,10 @@ public class AgentPresenter {
 	 * @param proxy 代理数据信息
 	 */
 	public void startProxySuccess(Proxy proxy) {
-		//计费开始计时
-		startTime=DBTools.getNetworkTime();
-		
 		new MessageDialog("代理配置成功.").show();
 		agentView.setGuiText(proxy.getProxyName() + ": 代理连接成功");
 		logger.info("Proxy established successful");
+		new OnlineService().addOnlineRecord(getUID());	
 		agentModel.printAgent();
 	}
 	
@@ -289,11 +288,6 @@ public class AgentPresenter {
 	 * 代理被成功关闭后执行的操作
 	 */
 	public void stopProxySuccess() {
-		//费用结算
-		if(settleAccount())
-			logger.info("Reckon Fee successful");
-		else
-			logger.info("Reckon Fee failed");
 		
 		Proxy currentproxy = agentModel.getCurrentProxy();
 		agentModel.setProxyStatus(currentproxy.getServiceTypeIndex(), false);
@@ -420,16 +414,28 @@ public class AgentPresenter {
 			return false;
 		}
 		return true;
-	}
+	}	
 	
 	/**
-	 * 付费操作
+	 * 获取当前登录的用户ID
 	 * @return
 	 */
-	private boolean settleAccount() {
-		if(new AccountService().reckonFee(startTime, stopTime))
-			return true;
-		return false;
+	private int getUID() {
+		BufferedReader br=null;
+		try {
+			br=new BufferedReader(new FileReader(Openvpn.getAuthenFilepath()));
+			String[] strs=br.readLine().split(" ");
+			br.close();
+			return Integer.valueOf(strs[2]);
+		}catch(Exception e) {
+			if(br!=null) {
+				try {
+					br.close();
+				}catch (Exception e1) {
+					logger.info("AuthenFile close failed");
+				}
+			}
+		}
+		return 1;
 	}
-	
 }

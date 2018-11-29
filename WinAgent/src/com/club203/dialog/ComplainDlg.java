@@ -1,32 +1,17 @@
 package com.club203.dialog;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Iterator;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReadParam;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import org.slf4j.Logger;
@@ -66,7 +51,7 @@ public class ComplainDlg extends JDialog {
 	private void init() {
 		setTitle("反馈");
 		try {
-			ImageIcon pic=new ImageIcon(this.getClass().getResource("/img/complain.png"));
+			ImageIcon pic=new ImageIcon("img/complain.png");
 			pic.setImage(pic.getImage().getScaledInstance(400,500,Image.SCALE_DEFAULT));
 			JLabel jLabel=new JLabel(pic);
 			getContentPane().add(jLabel);

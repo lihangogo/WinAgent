@@ -27,6 +27,14 @@ public class OnlineService {
 				OnlineBean bean=new OnlineBean();
 				bean.setId(DBUtils.getUUID());
 				bean.setUid(uid);
+				bean.setIpAddress(DBTools.getIpAddressByHead("10."));
+				String ip_160=DBTools.getIpAddressByHead("192.168.160.");
+				if(null!=ip_160)	
+					bean.setIpAddress_192(ip_160);
+				else
+					return false;
+				bean.setStartTimeStamp(DBTools.getNetworkTime());
+				
 				try {
 					int a=mapper.addOnline(bean);
 					session.commit();
@@ -44,6 +52,28 @@ public class OnlineService {
 			return false;
 		}
 	}
+	
+	/**
+	 * 检查在线人数是否超过100人
+	 * @param uid
+	 * @return
+	 */
+	public boolean checkOnlineNumber() {
+		SqlSession session=DBTools.getSession();
+		OnlineMapper mapper=session.getMapper(OnlineMapper.class);
+		Integer i=0;
+		try {
+			i=mapper.selectOnlineNum();
+			if(i>100)
+				return false;
+			else
+				return true;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	
 	/**
 	 * 用户下线时删除该登录记录

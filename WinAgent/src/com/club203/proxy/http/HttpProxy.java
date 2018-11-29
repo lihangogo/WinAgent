@@ -2,9 +2,6 @@ package com.club203.proxy.http;
 
 import java.nio.charset.Charset;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.club203.utils.HttpUtils;
 import com.registry.RegistryKey;
 import com.registry.RegistryValue;
@@ -22,8 +19,6 @@ import com.registry.ValueType;
  * 注：注册表的编码格式与Java Unicode存在区别，尽管都是双字节编码。Java Unicode会在头部补负数，而注册表会在后面补0，其他均相同。
  */
 public class HttpProxy {
-	
-	private final static Logger logger = LoggerFactory.getLogger(HttpProxy.class);
 	
 	private static RegistryKey currentUser = RegistryKey.getRootKeyForIndex(RegistryKey.HKEY_CURRENT_USER_INDEX);
 	private static RegistryKey proxyKey = new RegistryKey(currentUser, "\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\");
