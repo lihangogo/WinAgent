@@ -8,12 +8,10 @@ import java.awt.FontMetrics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -23,7 +21,7 @@ import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 
 /**
- * @author hehaoxing
+ * @author lihan
  * 自定义弹出对话框
  * Swing自带MessageDialog存在一些不合理的特性
  */

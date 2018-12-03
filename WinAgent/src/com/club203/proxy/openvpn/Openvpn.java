@@ -2,6 +2,8 @@ package com.club203.proxy.openvpn;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
@@ -17,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.club203.config.ConfReader;
 import com.club203.exception.openvpn.OpenVPNException;
 import com.club203.proxy.ProxyService;
+import com.club203.service.dbService.OnlineService;
 import com.club203.utils.EncryptUtils;
 
 /**
@@ -151,7 +154,6 @@ public class Openvpn implements ProxyService {
 				}
 				return errorStatus;
 			}
-
 		};
 		// 隧道建立
 		FutureTask<Integer> futureTask = new FutureTask<Integer>(task);
@@ -200,6 +202,22 @@ public class Openvpn implements ProxyService {
 	}
 
 	/**
+	 * 读取鉴权文件内的信息
+	 * @return
+	 */
+	private Integer readUID() {
+		try {
+			BufferedReader br=new BufferedReader(new FileReader(Openvpn.getAuthenFilepath()));
+			String[] strs=br.readLine().split(" ");
+			br.close();
+			return Integer.valueOf(strs[2]);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 1;
+	}
+	
+	/**
 	 * 代理退出后，清理资源
 	 */
 	public static int clean() throws Exception {
@@ -239,7 +257,6 @@ public class Openvpn implements ProxyService {
 		
 		new File(keyFilePath).delete();
 		new File(crtFilePath).delete();
-		
 	}
 
 	/**
@@ -276,7 +293,6 @@ public class Openvpn implements ProxyService {
 				String line = null;
 				// readLine()方法不抛出中断异常，但关闭进程会因读到null，从而跳出响应中断
 				while ((line = in.readLine()) != null) {
-					// System.out.println(line);
 					if (line.contains("Initialization Sequence Completed")) {
 						return 0;
 					} else if (line.contains("AUTH_FAILED")) {

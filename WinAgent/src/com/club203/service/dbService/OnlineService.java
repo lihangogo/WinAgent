@@ -1,5 +1,11 @@
 package com.club203.service.dbService;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+
 import org.apache.ibatis.session.SqlSession;
 
 import com.club203.beans.OnlineBean;
@@ -81,21 +87,44 @@ public class OnlineService {
 	 * @return
 	 */
 	public boolean deleteOnlineRecord(Integer uid) {
-		SqlSession sqlSession=DBTools.getSession();
-		OnlineMapper mapper=sqlSession.getMapper(OnlineMapper.class);
-		Integer i=0;
+		DataOutputStream dos=null;
+		DataInputStream dis=null;
+		Socket socket=null;
+		byte[] bytes=null;
+		int length=0;
 		try {
-			i=mapper.delOnline(uid);
-			sqlSession.commit();
-			if(i>0)
-				return true;
-			else
-				return false;
-		}catch(Exception e) {
+			socket=new Socket();
+			socket.connect(new InetSocketAddress("10.108.101.219", 33457), 10*1000);
+			dos=new DataOutputStream(socket.getOutputStream());
+			dos.write("logout_user".getBytes());
+			dos.flush();
+			dis=new DataInputStream(socket.getInputStream());
+			bytes=new byte[1024];
+			length=dis.read(bytes);
+			String message=new String(bytes,0,length);
+			if(message.equals("ok")) {
+				dos.write(String.valueOf(uid).getBytes());
+				dos.flush();
+			}
+			socket.close();
+			return true;
+		} catch (IOException e) {
 			e.printStackTrace();
-			sqlSession.rollback();
-			return false;
-		}	
+		}finally {
+			if(dos!=null)
+				try {
+					dos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			if(socket!=null)
+				try {
+					socket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		}
+		return false;
 	}
 	
 	/**

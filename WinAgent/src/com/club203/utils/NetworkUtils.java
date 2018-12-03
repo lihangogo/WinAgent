@@ -229,6 +229,7 @@ public class NetworkUtils {
         try {  
             Socket socket = new Socket(theAddress,port);  
             flag = true;  
+            socket.close();
         } catch (IOException e) {  }  
         return flag;  
     }  

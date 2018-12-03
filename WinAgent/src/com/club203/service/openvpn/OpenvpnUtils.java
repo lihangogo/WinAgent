@@ -1,5 +1,10 @@
 package com.club203.service.openvpn;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,4 +98,94 @@ public class OpenvpnUtils {
 		}
 		return true;
 	}
+	
+	/**
+	 * 修改openvpn虚拟网卡的跃点
+	 * @return
+	 */
+	public static boolean changeMetric() {
+		InputStream is=null;
+		try {
+			is = Runtime.getRuntime().exec("ipconfig").getInputStream();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		BufferedReader br=null;;
+		try {
+			br = new BufferedReader(new InputStreamReader(is,"GB2312"));
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}
+		String line="";
+		String[] strs=new String[100];
+		int index=0;
+		try {
+			while((line=br.readLine())!=null) {
+				strs[index++]=line;
+				if(line.contains("192.168.160")) {
+					break;
+				}	
+			}
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if(!line.contains("192.168.160"))
+			return false;
+		String name="";
+		for(int i=index-2;i>=0;i--) {
+			if(strs[i].contains("适配器")) {
+				name=strs[i].substring(strs[i].indexOf(' ')+1, strs[i].length()-1);
+				break;
+			}
+		}
+		if(powerShelllChangeMetric(name))
+			return true;
+		else
+			return false;
+	}
+	
+	/**
+	 * 在PowerShell中执行修改网卡跃点数的命令
+	 * @param name
+	 * @return
+	 */
+	private static boolean powerShelllChangeMetric(String name) {
+		InputStream is=null;
+		try {
+			is = Runtime.getRuntime().exec("powershell Get-NetIPInterface").getInputStream();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		BufferedReader br=null;
+		try {
+			br = new BufferedReader(new InputStreamReader(is,"GB2312"));
+		} catch (UnsupportedEncodingException e2) {
+			e2.printStackTrace();
+		}
+		String line="";
+		String[] strs=new String[50];
+		String ind="";
+		int index=0;
+		try {
+			while((line=br.readLine())!=null) {
+				strs[index++]=line;
+				if(line.contains(name)) {
+					ind=line.substring(0, line.indexOf(' '));
+					break;
+				}	
+			}
+			br.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		try {
+			Runtime.getRuntime().exec("powershell Set-NetIPInterface -InterfaceIndex "+ind+" -InterfaceMetric 10");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+		
 }

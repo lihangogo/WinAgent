@@ -38,7 +38,7 @@ public class HttpProxyListener implements DetectService {
 	public void start() {
 		executor = new Thread(() -> {
 			try {
-				URL url = new URL(domain);
+				new URL(domain);
 			} catch (MalformedURLException e) {
 				count.set(Integer.MAX_VALUE / 2);
 				logger.info(domain + " : Invalid url given");

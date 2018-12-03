@@ -81,6 +81,7 @@ public class ReconnectOpenvpnProxy extends ReconnectService{
 				commandList.clear();
 				commandList.add("route -p delete 0.0.0.0 mask 0.0.0.0 " + proxy.getVirtualIP().get(0));
 				commandList.add("route -p add 0.0.0.0 mask 0.0.0.0 " + proxy.getVirtualIP().get(0));
+				
 				for(String command : commandList) {
 					Runtime.getRuntime().exec(command).waitFor();
 					logger.info("Execute command: " + command);

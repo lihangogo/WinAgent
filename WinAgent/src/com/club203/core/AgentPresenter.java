@@ -134,6 +134,13 @@ public class AgentPresenter {
 			logger.info("Click repeatedly");
 			return false;
 		}
+		
+		if(!proxyName.equals("校内接入线路(OpenVPN全局)")) {
+			new MessageDialog("此服务未开通，请选择其他线路").show();
+			logger.info("this service is stoped");
+			return false;
+		}	
+		
 		if (agentModel.isConnected() == false){
 			isWork.set(true);
 			agentView.setGuiText("正在建立连接");
@@ -287,8 +294,7 @@ public class AgentPresenter {
 	/**
 	 * 代理被成功关闭后执行的操作
 	 */
-	public void stopProxySuccess() {
-		
+	public void stopProxySuccess() {	
 		Proxy currentproxy = agentModel.getCurrentProxy();
 		agentModel.setProxyStatus(currentproxy.getServiceTypeIndex(), false);
 		agentModel.setCurrentProxy(null);
@@ -296,6 +302,8 @@ public class AgentPresenter {
 		new MessageDialog("代理关闭成功.").show();
 		agentView.setGuiText(currentproxy.getProxyName() + ": 代理关闭成功");
 		logger.info("Proxy is stopped sucessful");
+		if(new OnlineService().deleteOnlineRecord(getUID()))
+			logger.info("logout success");
 		isWork.set(false);
 		agentModel.printAgent();
 	}

@@ -91,6 +91,13 @@ public class StartOpenvpnProxy extends StartService {
 				logger.info("Execute command: " + command);
 			}
 			NetworkUtils.setDNS(proxy.getDnsServer());
+			
+			//修改虚拟网卡的跃点数
+			if(OpenvpnUtils.changeMetric())
+				logger.info("change netinterface metric successful");
+			else
+				logger.info("change netinterface metric failed");
+			
 			//检查可用
 			String proxyVerifyServer = ServiceUtils.getProxyVerifyIP(proxy);
 			String dnsVerifyServer = ServiceUtils.getDnsVerifyHost(proxy);

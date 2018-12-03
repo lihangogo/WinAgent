@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import com.club203.beans.AccountBean;
 import com.club203.beans.UserBean;
-import com.club203.config.ConfReader;
 import com.club203.proxy.openvpn.Openvpn;
 import com.club203.service.dbService.AccountService;
 import com.club203.service.dbService.OnlineService;
