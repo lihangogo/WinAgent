@@ -79,6 +79,7 @@ public class AgentView extends JFrame{
 		setLayout(null);
 		
 		String[] serviceTypeList = ConfReader.getConfig().getServiceType();
+		
 		for(int i = 0; i < serviceTypeList.length; i++){
 			JLabel label = new JLabel(serviceTypeList[i]);
 			label.setText(serviceTypeList[i]);
@@ -88,7 +89,11 @@ public class AgentView extends JFrame{
 			
 			JButton buttonOpen = new JButton("打开");
 			buttonOpen.setText("打开");
-			buttonOpen.setEnabled(true);
+			if(serviceTypeList[i].trim().equals("校外线路")) {
+				buttonOpen.setEnabled(false);
+			}else {
+				buttonOpen.setEnabled(true);
+			}	
 			buttonOpen.setBounds(widthZoom(40), heightZoom(75 + i * 100), widthZoom(100), heightZoom(25));
 			proxyOpen.add(buttonOpen);
 			container.add(proxyOpen.get(i));
@@ -112,8 +117,8 @@ public class AgentView extends JFrame{
 		addComboboxFromConf(ProxyReader.getProxy());
 		
 		//投诉按钮
-		JButton buttonComplain = new JButton("反馈");
-		buttonComplain.setText("反馈");
+		JButton buttonComplain = new JButton("投诉");
+		buttonComplain.setText("投诉");
 		buttonComplain.setEnabled(true);
 		buttonComplain.setBounds(widthZoom(230), heightZoom(15 + serviceTypeList.length * 100), widthZoom(60), heightZoom(25));
 		buttonComplain.addActionListener(new ActionListener() {		
@@ -136,8 +141,6 @@ public class AgentView extends JFrame{
 		try {
 			Image image=Toolkit.getDefaultToolkit().createImage("img/logo.png");
 			this.setIconImage(image);
-			//Image image = ImageIO.read(this.getClass().getResource("/img/logo.png"));
-			//this.setIconImage(image);
 		} catch (Exception e) { }
 		//增加系统托盘图标
 		this.trayIcon = addSystemTray();

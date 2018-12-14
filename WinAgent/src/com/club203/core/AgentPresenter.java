@@ -394,7 +394,11 @@ public class AgentPresenter {
 		}
 		if(isConnect == false){
 			for(int i = 0; i < serviceTypeList.length; i++) {
-				agentView.setOpenButton(i, true);
+				if(serviceTypeList[i].trim().equals("校外线路")) {
+					agentView.setOpenButton(i, false);
+				}else {
+					agentView.setOpenButton(i, true);
+				}	
 			}
 		}
 	}
