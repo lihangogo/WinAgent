@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<c3p0-config>
+
+  <named-config name="MyDriver">
+    <!-- 连接超时设置30秒 -->
+    <property name="checkoutTimeout">3000</property>
+    <!-- 30秒检查一次connection的空闲 -->  
+    <property name="idleConnectionTestPeriod">30</property> 
+    <!-- 最多的一个connection空闲时间 -->    
+    <property name="maxIdleTime">30</property>
+    <!-- 批处理的语句 -->  
+    <property name="maxStatements">50</property> 
+    <!-- 每次增长几个连接 -->  
+    <property name="acquireIncrement">3</property> 
+      
+    <property name="initialPoolSize">10</property>
+    <property name="minPoolSize">2</property>
+    <property name="maxPoolSize">1000</property>
+    <property name="driverClass">com.mysql.jdbc.Driver</property>
+    <property name="jdbcUrl">jdbc:mysql://10.108.102.133:3306/accelerator?characterEncoding=utf8</property>
+    <property name="user">root</property>
+    <property name="password">Lh991978</property>
+  </named-config>
+</c3p0-config>
