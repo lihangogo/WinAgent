@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<conf>
+	
+	<!-- 各个配置文件的种类 -->
+	<confItems>
+		<confItem>proxyListConf</confItem>
+		<confItem>apBuptOvpn</confItem>
+		<confItem>ca</confItem>
+		<confItem>clientEnCrt</confItem>
+		<confItem>clientEnKey</confItem>
+		<confItem>mysqlProperties</confItem>
+		<confItem>deAlg</confItem>  <!-- 解密算法 -->
+		<confItem>complainImage</confItem>  <!-- 投诉二维码 -->
+		
+	</confItems>
+
+	<!-- 各个配置文件的版本号 -->
+	<diyVersion>
+		<proxyListConfVersion>1.0</proxyListConfVersion>
+		<apBuptOvpnVersion>1.0</apBuptOvpnVersion>
+		<caVersion>1.0</caVersion>
+		<clientEnCrtVersion>1.0</clientEnCrtVersion>
+		<clientEnKeyVersion>1.0</clientEnKeyVersion>
+		<mysqlPropertiesVersion>1.0</mysqlPropertiesVersion>
+		<deAlgVersion>1.0</deAlgVersion>
+		<complainImageVersion>2.0</complainImageVersion>
+		
+	</diyVersion>
+	
+	<!-- 各个配置文件的存放路径或值 -->
+	<confPath>
+		<proxyListConfPath>conf/ProxyList.conf</proxyListConfPath>
+		<apBuptOvpnPath>conf/openvpn/ap-bupt.ovpn</apBuptOvpnPath>
+		<caPath>conf/openvpn/openvpn-ca/ca</caPath>
+		<clientEnCrtPath>conf/openvpn/openvpn-ca/client_en.crt</clientEnCrtPath>
+		<clientEnKeyPath>conf/openvpn/openvpn-ca/client_en.key</clientEnKeyPath>
+		<mysqlPropertiesPath>mysql.properties</mysqlPropertiesPath>
+		<deAlgPath>DES</deAlgPath>
+		<complainImagePath>conf/complain.png</complainImagePath>
+		
+	</confPath>
+</conf>

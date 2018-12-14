@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatis.AccountMapper">
+<!-- 自定义返回结果集 -->
+   <resultMap id="accountMap" type="com.mybatis.AccountBean">
+        <id property="accid" column="accid" javaType="java.lang.String"></id>
+        <result property="uid" column="uid" javaType="java.lang.Integer"></result>
+        <result property="balance" column="balance" javaType="java.lang.Integer"></result>
+        <result property="latestPay" column="latestpay" javaType="java.util.Date"></result>
+        <result property="latestPayNum" column="latestpaynum" javaType="java.lang.Integer"></result>
+    </resultMap>
+   
+    <resultMap id="integer" type="java.lang.Integer"> 
+    </resultMap>
+<!-- 在各种标签中的id属性必须和接口中的方法名相同 ， id属性值必须是唯一的，不能够重复使用。parameterType属性指明查询时使用的参数类型，resultType属性指明查询返回的结果集类型-->    
+<!-- useGeneratedKeys：（ 仅 对 insert 有 用 ） 这 会 告 诉 MyBatis 使 用 JDBC 的getGeneratedKeys 
+            方法来取出由数据（比如：像 MySQL 和 SQLServer 这样的数据库管理系统的自动递增字段）内部生成的主键。默认值： false。 -->    
+<!--keyProperty： （仅对 insert有用）标记一个属性， MyBatis 会通过 getGeneratedKeys或者通过 insert 语句的 selectKey 子元素设置它的值。默认：不设置。 -->
+<!--#{}中的内容，为占位符，当参数为某个JavaBean时，表示放置该Bean对象的属性值  -->
+    
+    <select id="selectAccount" parameterType="Integer" resultMap="accountMap">
+     	select * from account where uid=#{0}
+    </select>    
+    
+    <update id="updateAccount" parameterType="com.mybatis.AccountBean">
+    	update account set balance=#{balance} where uid=#{uid}
+    </update>
+    
+</mapper>

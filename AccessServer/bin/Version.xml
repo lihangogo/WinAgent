@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<conf>
+	
+	<billingrules>
+		<rule1>
+			<perMinute>1</perMinute>
+		</rule1>
+	</billingrules>
+	
+</conf>

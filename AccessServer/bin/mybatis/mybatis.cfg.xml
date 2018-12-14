@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  
+    <!-- 引入外部配置文件 -->
+    <properties resource="mybatis/mysql.properties"></properties>
+    
+    <!-- 为JAVA Bean起类别名 -->
+    <typeAliases>
+    	<!-- 起名方式1，逐个配置 
+    		<typeAlias type="com.club203.beans.UserBean" alias="UserBean"/>-->	
+    	<package name="com.mybatis"/>
+    </typeAliases>
+    
+     <!-- 配置mybatis运行环境 -->
+       <environments default="dybatis">
+         
+         <environment id="dybatis">
+         		<transactionManager type="JDBC"/>
+         		<dataSource type="POOLED">
+         		 	<property name="driver" value="${jdbc.driverInner}" />
+                 	<property name="url" value="${jdbc.urlInner}" />
+                 	<property name="username" value="${jdbc.usernameInner}" />
+                 	<property name="password" value="${jdbc.passwordInner}" />
+             	</dataSource>
+         </environment>
+     </environments> 
+         
+     <mappers>
+     	<mapper resource="mybatis/AccountMapper.xml"/>
+     	<mapper resource="mybatis/OnlineMapper.xml"/>
+     	<mapper resource="mybatis/OnlineTempMapper.xml"/>
+     </mappers>
+     
+ </configuration>
