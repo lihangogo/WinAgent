@@ -3,7 +3,9 @@ package com.club203.dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -39,9 +41,11 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 	
 	private boolean correctInput = false;
 	private final static Logger logger = LoggerFactory.getLogger(OpenVPNAuthDlg.class);
+	private static String rememberFilePath = "conf/remember.txt";
 	
 	public OpenVPNAuthDlg() {
 		super();
+		init();
 		submitButton.addActionListener(new Submit());
 		submitButton.registerKeyboardAction(new Submit(), KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), 
 				JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -53,6 +57,47 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 		setVisible(true);
 	}
 	
+	/**
+	 * 初始化用户名密码控件
+	 */
+	private void init() {
+		File file=null;
+		BufferedReader br=null;
+		try {
+			file=new File(rememberFilePath);
+			if(!file.exists()) {
+				usernameField.setText("");
+				passwordField.setText("");
+			}else {
+				br=new BufferedReader(new FileReader(file));
+				String str=br.readLine().trim();
+				if(str.length()==0) {
+					usernameField.setText("");
+					passwordField.setText("");
+				}else {
+					String[] strs=str.split(" ");
+					usernameField.setText(strs[0]);
+					passwordField.setText(strs[1]);
+					logger.info("Read remembered information successful");
+				}	
+				br.close();
+			}	
+		}catch(Exception e) {
+			if(br!=null) {
+				try {
+					br.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}	
+		}
+	}
+	
+	/**
+	 * 提交按钮的消息响应
+	 * @author club203LH
+	 *
+	 */
 	class Submit implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -90,6 +135,7 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 				if(account.getBalance()>0) {	//账户余额足够
 					correctInput = true;
 					logger.info("User: "+user.getUserName()+" login successful");
+					rememberPassword();
 					try(FileWriter filewriter = new FileWriter(Openvpn.getAuthenFilepath())){
 						filewriter.write(new String(usernameField.getText()).trim());
 						filewriter.write(" ");
@@ -106,7 +152,8 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 					}
 					logger.info("Inputing username and password successful");
 					OpenVPNAuthDlg.this.dispose();
-				}else {   //账户余额不足
+				}else {   
+					//账户余额不足
 					correctInput = false;					
 					JOptionPane.showMessageDialog(OpenVPNAuthDlg.this, "账户余额不足，请及时充值！", 
 							"警告", JOptionPane.WARNING_MESSAGE);
@@ -120,6 +167,11 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 		}
 	}
 	
+	/**
+	 * 重置按钮的消息响应
+	 * @author club203LH
+	 *
+	 */
 	class Reset implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -128,6 +180,33 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 			username="";
 			passwd="";
 			logger.info("Clearing username and password succeddful");
+		}
+	}
+	
+	/**
+	 * 记住用户名和密码选择控件的处理
+	 */
+	private void rememberPassword() {
+		boolean bool=rememberCheckBox.isSelected();
+		if(!bool)
+			return;
+		String userName="";
+		String password="";
+		userName = new String(usernameField.getText().trim());
+		password = new String(passwordField.getPassword()).trim();
+		File file=null;
+		try {
+			file=new File(rememberFilePath);
+			if(!file.exists())
+				file.createNewFile();
+			FileWriter fileWriter=new FileWriter(file,false);
+			fileWriter.write(userName+" "+password);
+			fileWriter.flush();
+			fileWriter.close();
+			logger.info("Remember username and password succeddful");
+		}catch(Exception exception) {
+			logger.info("Remember username and password failed");
+			JOptionPane.showMessageDialog(OpenVPNAuthDlg.this, "记住密码失败", "警告", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	

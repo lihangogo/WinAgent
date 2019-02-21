@@ -57,7 +57,7 @@ public class DBTools {
 		byte[] bytes = null;
 		int length = 0;
 		
-		String ip="10.108.102.133";
+		String ip="10.108.101.237";
 		int port=33456;
 		
 		long currentTime=0;

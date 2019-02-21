@@ -45,7 +45,7 @@ import com.club203.dialog.MessageDialog;
 
 public class AgentView extends JFrame{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	

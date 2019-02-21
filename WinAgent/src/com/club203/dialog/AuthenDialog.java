@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -17,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 这里鉴权对话框，作为所有鉴权对话框的基类，仅包含界面
- * @author hehaoxing
+ * @author lihan
  */
 public abstract class AuthenDialog extends JDialog{
 	/**
@@ -26,8 +27,8 @@ public abstract class AuthenDialog extends JDialog{
 	private static final long serialVersionUID = 1L;
 	
 	//相对于1920 x 1080显示器的分辨率
-	private final int WIDTH = 270;
-	private final int HEIGHT = 150;
+	private final int WIDTH = 290;
+	private final int HEIGHT = 152;
 	//当前分辨率
 	private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	//用户名密码框
@@ -36,6 +37,8 @@ public abstract class AuthenDialog extends JDialog{
 	//确认按钮
 	protected final JButton submitButton;
 	protected final JButton resetButton;
+	//记住密码选择控件
+	protected final JCheckBox rememberCheckBox;
 	
 	private final static Logger logger = LoggerFactory.getLogger(AuthenDialog.class);
 
@@ -57,16 +60,20 @@ public abstract class AuthenDialog extends JDialog{
 		passwordField.setBounds(widthZoom(85), heightZoom(50), widthZoom(160), heightZoom(25));
 
 		submitButton = new JButton("确定");
-		submitButton.setBounds(widthZoom(60), heightZoom(85), widthZoom(60), heightZoom(25));
+		submitButton.setBounds(widthZoom(20), heightZoom(87), widthZoom(60), heightZoom(25));
 		resetButton = new JButton("重置");
-		resetButton.setBounds(widthZoom(150), heightZoom(85), widthZoom(60), heightZoom(25));
-
+		resetButton.setBounds(widthZoom(100), heightZoom(87), widthZoom(60), heightZoom(25));
+		
+		rememberCheckBox = new JCheckBox("记住密码",true);	
+		rememberCheckBox.setBounds(widthZoom(180), heightZoom(87), widthZoom(90), heightZoom(25));
+		
 		container.add(userLabel);
 		container.add(passLabel);
 		container.add(usernameField);
 		container.add(passwordField);
 		container.add(submitButton);	
 		container.add(resetButton);
+		container.add(rememberCheckBox);
 		
 		setResizable(false);
 		setSize(widthZoom(WIDTH), heightZoom(HEIGHT));

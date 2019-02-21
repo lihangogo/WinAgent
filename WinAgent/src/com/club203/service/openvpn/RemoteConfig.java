@@ -52,7 +52,7 @@ public class RemoteConfig {
 	private FileInputStream fis = null;
 	private File file = null;
 	private ArrayList<ConfFileBean> list = null;
-	private String ip="10.108.102.133";
+	private String ip="10.108.101.237";
 	private int port=33456;
 	private static String versionConfPath="conf/Version.xml";
 	private static String systemConfPath="conf/SystemConf.xml";

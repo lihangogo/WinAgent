@@ -48,11 +48,9 @@ public class OpenvpnUtils {
 		//添加自定义检测域名：同时填写Ping
 		if(pingVerifyList != null && pingVerifyList.size() >= 1) {
 			for(String server : pingVerifyList) {
-				//listener.adddetectServices(new PingListener(server, 500));
 				listener.adddetectServices(new InetPingListener(server, 2000, 5000));
 			}
 		} else {
-			//listener.adddetectServices(new PingListener(ConfReader.getConfig().getDefaultPingVerifyServer(), 500));
 			listener.adddetectServices(new InetPingListener(ConfReader.getConfig().getDefaultPingVerifyServer(), 2000, 5000));
 		}
 		//添加自定义DNS检测域名
