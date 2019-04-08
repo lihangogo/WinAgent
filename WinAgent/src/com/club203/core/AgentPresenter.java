@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
@@ -49,6 +52,10 @@ public class AgentPresenter {
 	private final static Logger logger = LoggerFactory.getLogger(AgentPresenter.class);
 	
 	private static AgentPresenter agentPresenter = null;
+	/**
+	 * 任务定时器
+	 */
+	private ScheduledExecutorService service=null;
 	
 	private AgentPresenter() {
 		checkVersion(); //检查配置版本
@@ -224,6 +231,7 @@ public class AgentPresenter {
 		agentView.setGuiText(proxy.getProxyName() + ": 代理连接成功");
 		logger.info("Proxy established successful");
 		new OnlineService().addOnlineRecord(getUID());	
+		startScheduleTask();
 		agentModel.printAgent();
 	}
 	
@@ -304,6 +312,7 @@ public class AgentPresenter {
 		logger.info("Proxy is stopped sucessful");
 		if(new OnlineService().deleteOnlineRecord(getUID()))
 			logger.info("logout success");
+		stopScheduleTask();
 		isWork.set(false);
 		agentModel.printAgent();
 	}
@@ -449,5 +458,30 @@ public class AgentPresenter {
 			}
 		}
 		return 1;
+	}
+	
+	/**
+	 * 启动任务定时器
+	 */
+	private void startScheduleTask() {
+		service=Executors .newSingleThreadScheduledExecutor();  
+		Runnable runnable=new Runnable() {
+			
+			@Override
+			public void run() {
+				OnlineService.reportOnlineMessage(getUID());
+			}
+		};
+        // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间  
+        service.scheduleAtFixedRate(runnable, 0, 60, TimeUnit.SECONDS); 
+        logger.info("Schedule start success");
+	}
+	
+	/**
+	 * 关闭任务定时器
+	 */
+	private void stopScheduleTask() {
+		service.shutdown();
+		logger.info("Schedule stop success");
 	}
 }

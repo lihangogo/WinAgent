@@ -30,6 +30,7 @@ import org.w3c.dom.NodeList;
 
 import com.club203.beans.ConfFileBean;
 import com.club203.beans.Configuration;
+import com.club203.utils.NetworkUtils;
 
 /**
  * 负责远程配置管理
@@ -52,8 +53,12 @@ public class RemoteConfig {
 	private FileInputStream fis = null;
 	private File file = null;
 	private ArrayList<ConfFileBean> list = null;
-	private String ip="10.108.101.237";
+	
+	private String ip="";
+	private String ipFirst="10.108.101.237";
+	private String ipSecond="10.108.100.148";
 	private int port=33456;
+	
 	private static String versionConfPath="conf/Version.xml";
 	private static String systemConfPath="conf/SystemConf.xml";
 	
@@ -63,6 +68,10 @@ public class RemoteConfig {
 	public RemoteConfig() {
 		list=new ArrayList<ConfFileBean>();
 		
+		if(NetworkUtils.ping3(ipFirst, 3))
+			ip=ipFirst;
+		else
+			ip=ipSecond;
 	}
 	
 	/**
@@ -222,7 +231,7 @@ public class RemoteConfig {
 	 * @return
 	 */
 	private String getInnerNetIp(String head) {
-		String ip = null;
+		String ip_temp = null;
 		try {
 			Enumeration<NetworkInterface> allNetworkInterfaces = NetworkInterface.getNetworkInterfaces();
 			NetworkInterface networkInterface = null;
@@ -233,9 +242,9 @@ public class RemoteConfig {
 				while (allInetAddress.hasMoreElements()) {
 					ipAddress = allInetAddress.nextElement();
 					if (ipAddress != null && ipAddress instanceof Inet4Address) {
-						ip = ipAddress.getHostAddress().trim();
-						if (ip.startsWith(head))
-							return ip;
+						ip_temp = ipAddress.getHostAddress().trim();
+						if (ip_temp.startsWith(head))
+							return ip_temp;
 					}
 				}
 			}
@@ -243,7 +252,7 @@ public class RemoteConfig {
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
-		return ip;
+		return ip_temp;
 	}
 
 	/**
@@ -387,4 +396,5 @@ public class RemoteConfig {
 			e.printStackTrace();
 		}	
 	}
+	
 }

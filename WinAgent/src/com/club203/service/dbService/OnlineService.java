@@ -13,8 +13,16 @@ import com.club203.mapper.OnlineMapper;
 import com.club203.utils.DBTools;
 import com.club203.utils.DBUtils;
 
+/**
+ * 和在线状态相关的服务实现类
+ * @author club203LH
+ *
+ */
 public class OnlineService {
 
+	private static final String ipAccessServer="10.108.101.219";
+	private static final Integer portAccessServer=33457;
+	
 	/**
 	 * 添加在线记录
 	 * @param uid 用户id
@@ -145,6 +153,32 @@ public class OnlineService {
 		}catch(Exception e) {
 			e.printStackTrace();
 			return true;
+		}
+	}
+	
+	/**
+	 * 周期性上报在线信息
+	 * @param uid
+	 */
+	@SuppressWarnings("resource")
+	public static void reportOnlineMessage(Integer uid) {
+		DataOutputStream dos=null;
+		Socket socket=null;
+		try {
+			socket=new Socket();
+			socket.connect(new InetSocketAddress(ipAccessServer, portAccessServer), 10*1000);
+			dos=new DataOutputStream(socket.getOutputStream());
+			dos.write(("hello "+uid).getBytes());
+			dos.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally {
+			if(dos!=null)
+				try {
+					dos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 		}
 	}
 	

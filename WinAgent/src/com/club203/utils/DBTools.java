@@ -16,14 +16,34 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
+/**
+ * 数据库相关操作的工具类
+ * @author club203LH
+ *
+ */
 public class DBTools {
+	//主备服务器的IP地址及其对应的连接配置名
+	private static String firstIP="10.108.101.237";
+	private static String secondIP="10.108.100.148";
+	private static String firstEnvironment="dybatis";
+	private static String secondEnvironment="second_batis";
+	private static int port=33456;
+	
 	public static SqlSessionFactory sessionFactory;
     static{
         try {
             //使用MyBatis提供的Resources类加载mybatis的配置文件
             Reader reader = Resources.getResourceAsReader("mybatis.cfg.xml");
-            //构建sqlSession的工厂
-            sessionFactory = new SqlSessionFactoryBuilder().build(reader);
+            
+            //判断主用数据库服务器是否失效，若失效，启用备用服务器
+            String environment="";
+            if(NetworkUtils.ping3(firstIP, 3))
+            	environment=firstEnvironment;
+            else
+            	environment=secondEnvironment;
+            
+            //构建sqlSession的工厂                               
+            sessionFactory = new SqlSessionFactoryBuilder().build(reader,environment);                     
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -57,8 +77,11 @@ public class DBTools {
 		byte[] bytes = null;
 		int length = 0;
 		
-		String ip="10.108.101.237";
-		int port=33456;
+		String ip="";
+		if(NetworkUtils.ping3(firstIP, 3))
+			ip=firstIP;
+		else
+			ip=secondIP;
 		
 		long currentTime=0;
 		try {

@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -135,7 +136,10 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 				if(account.getBalance()>0) {	//账户余额足够
 					correctInput = true;
 					logger.info("User: "+user.getUserName()+" login successful");
+					
+					//判断是否需要保存用户名和密码
 					rememberPassword();
+					
 					try(FileWriter filewriter = new FileWriter(Openvpn.getAuthenFilepath())){
 						filewriter.write(new String(usernameField.getText()).trim());
 						filewriter.write(" ");
@@ -196,13 +200,13 @@ public class OpenVPNAuthDlg extends AuthenDialog {
 		password = new String(passwordField.getPassword()).trim();
 		File file=null;
 		try {
-			file=new File(rememberFilePath);
+			file=new File(rememberFilePath);		
 			if(!file.exists())
 				file.createNewFile();
 			FileWriter fileWriter=new FileWriter(file,false);
 			fileWriter.write(userName+" "+password);
 			fileWriter.flush();
-			fileWriter.close();
+			fileWriter.close();	
 			logger.info("Remember username and password succeddful");
 		}catch(Exception exception) {
 			logger.info("Remember username and password failed");

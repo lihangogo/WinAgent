@@ -24,6 +24,17 @@
                  	<property name="password" value="${jdbc.passwordInner}" />
              	</dataSource>
          </environment>
+         
+         <environment id="second_batis">
+         		<transactionManager type="JDBC"/>
+         		<dataSource type="POOLED">
+         		 	<property name="driver" value="${jdbc.driverInner}" />
+                 	<property name="url" value="${jdbc.urlInnerBackup}" />
+                 	<property name="username" value="${jdbc.usernameInner}" />
+                 	<property name="password" value="${jdbc.passwordInner}" />
+             	</dataSource>
+         </environment>
+         
      </environments> 
      
      <mappers>

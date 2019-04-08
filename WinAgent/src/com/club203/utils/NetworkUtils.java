@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author hehaoxing
+ * @author lihan
  * 
  * 网络相关工具类
  */
@@ -78,6 +78,40 @@ public class NetworkUtils {
     	BufferedReader in = null;  
         Runtime r = Runtime.getRuntime();
         String pingCommand = "ping " + ipAddress + " -n " + pingTimes    + " -w " + timeOut;  
+        // 执行命令并获取输出  
+        try {
+            Process p = r.exec(pingCommand);   
+            if (p == null) {    
+                return false;   
+            }
+            // 逐行检查输出,计算类似出现=23ms TTL=62字样的次数  
+            in = new BufferedReader(new InputStreamReader(p.getInputStream(), Charset.forName("GBK")));
+            String line = null;   
+            while ((line = in.readLine()) != null) {    
+            	// 如果出现类似=23ms TTL=62这样的字样,出现的次数=测试次数则返回真  
+            	if(getCheckResult(ipAddress, line) == 1) {
+            		return true;
+            	}
+            }   
+            return false;  
+        } catch (Exception ex) {  
+        	// 出现异常则返回假  
+            return false;  
+        } finally {   
+            try {    
+                in.close();   
+            } catch (IOException e) {}  
+        }
+    }
+    
+    /**
+     * 检查是否能够连接到服务器
+     * 降低了相比ping, ping3仅要求收到第一个包即可且不设置延迟检测
+     */
+    public static boolean ping3(String ipAddress, int pingTimes) {
+    	BufferedReader in = null;  
+        Runtime r = Runtime.getRuntime();
+        String pingCommand = "ping " + ipAddress + " -n " + pingTimes;  
         // 执行命令并获取输出  
         try {
             Process p = r.exec(pingCommand);   
