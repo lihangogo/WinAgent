@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.mybatis.AccountBean;
-import com.mybatis.AccountService;
 import com.mybatis.OnlineBean;
 import com.mybatis.OnlineService;
 import com.mybatis.OnlineTempBean;
@@ -57,7 +55,6 @@ public class CheckOnlineStatus {
 			}
 			if(tag) {   //今日未登陆过
 				onlineTempService.addOnlineTemp(ob);
-				//updateAccount(ob.getUid(),360);
 			}
 		}
 	}
@@ -67,36 +64,19 @@ public class CheckOnlineStatus {
 	 * @param uid
 	 * @param sum
 	 */
+	/*
 	private static void updateAccount(int uid,int sum) {
 		AccountService accountService=new AccountService();
 		AccountBean goal=accountService.selectAccountByUID(uid);
 		goal.setBalance(goal.getBalance()-sum);
 		accountService.updateAccount(goal);
-	}
-	
-	/*
-	private static int computeFee(Long start) {
-		long minutes=(System.currentTimeMillis()-start)/(1000*60); //分钟数
-		float rule=0.5f;
-		try {
-			File f=new File("conf/Version.xml");	
-			DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder=factory.newDocumentBuilder();
-			Document document=builder.parse(f);
-			rule=Float.valueOf(document.getElementsByTagName("perMinute").item(0).getFirstChild()
-						.getNodeValue());
-			return (int)(minutes*rule);
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		return (int)(minutes*rule);
 	}*/
 	
 	/**
      * 检查是否能够连接到服务器
      * 降低了相比ping, ping2仅要求收到第一个包即可
      */
-    private static boolean ping2(String ipAddress, int pingTimes) {
+    public static boolean ping2(String ipAddress, int pingTimes) {
     	BufferedReader in = null;  
         Runtime r = Runtime.getRuntime();
         String pingCommand = "ping " + ipAddress + " -c " + pingTimes; 

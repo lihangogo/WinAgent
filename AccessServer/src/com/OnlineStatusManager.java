@@ -26,20 +26,26 @@ public class OnlineStatusManager {
 				public void run() {
 					while (true) {
 						try {					
-							Socket socket = server.accept();
-							handleRequest(socket);
+							 final Socket socket = server.accept();
+							new Thread(new Runnable() {
+								
+								@Override
+								public void run() {
+									handleRequest(socket);
+								}
+							}).start();
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}
 				}
 			});
-			th.run(); //线程运行
+			th.start(); //线程运行
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+		
 	/**
 	 * 处理客户端请求   (登出-  ) 
 	 * @param socket
@@ -69,9 +75,10 @@ public class OnlineStatusManager {
 				changeAccount(uid);
 				if(new OnlineService().deleteOnlineRecord(uid))
 					System.out.println("下线成功: "+message);
+			}else {
+				//处理上传的心跳消息
+				ResponseReportMessage.handleReport(socket,message);
 			}
-			
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

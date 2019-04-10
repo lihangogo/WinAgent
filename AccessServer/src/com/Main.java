@@ -16,9 +16,14 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		//处理客户端下线时的请求并计费
 		OnlineStatusManager.manageOpt();
+		//定时将当日的新登录记录添加到当日的历史记录中
 		timerCheckOnlineStatus();
+		//每天的凌晨一点，将前24小时的登录历史记录删除
 		TimerManager.check();
+		//处理客户端用于确认连接的上报消息
+		new ResponseReportMessage().run();
 	}
 
 	/**
